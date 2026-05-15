@@ -224,6 +224,46 @@
     .obs ul { padding-left: 18px; }
     .obs li + li { margin-top: 6px; }
 
+
+    .card-minimizable .card-minimizable-header {
+      width: 100%;
+      border: 0;
+      border-radius: 0;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      text-align: left;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .card-minimizable .card-minimizable-arrow {
+      font-size: 1rem;
+      line-height: 1;
+      transition: transform 0.15s ease;
+    }
+    .card-minimizable:not(.is-minimized) .card-minimizable-arrow {
+      transform: rotate(90deg);
+    }
+    .card-minimizable.is-minimized .card-minimizable-body {
+      display: none;
+    }
+    .holliday-alert {
+      margin-top: 14px;
+      background: var(--amarelo-bg);
+      color: var(--amarelo);
+      border: 1px solid #fde047;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+    .holliday-alert strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
     footer {
       display: none;
     }
@@ -277,7 +317,7 @@
             <div class="campo">
               <label for="peso">Peso</label>
               <input type="text" id="peso" name="peso" inputmode="decimal" placeholder="Ex.: 12,5" value="4,800" maxlength="5">
-              <span class="unidade">kg (mínimo 3,500 e máximo 200)</span>
+              <span class="unidade">kg (mínimo 3,000 e máximo 95) · cálculo ao sair do campo</span>
             </div>
             <div class="campo">
               <label for="unidadeTaxa">Taxa</label>
@@ -299,9 +339,60 @@
         </div>
       </div>
 
-      <div class="secao">
-        <div class="secao-header">Preparo Real por Etapa</div>
-        <div class="secao-body">
+      <div class="secao card-minimizable is-minimized" id="standardPreparationCard" data-minimizable-card>
+        <button type="button" class="secao-header card-minimizable-header" id="standardPreparationToggle" data-minimizable-toggle aria-expanded="false" aria-controls="standardPreparationBody">
+          <span>Solução Isotônica Padrão</span>
+          <span class="card-minimizable-arrow" aria-hidden="true">▸</span>
+        </button>
+        <div class="secao-body card-minimizable-body" id="standardPreparationBody">
+          <div class="bloco-padrao">
+            <div class="grid-5">
+              <div class="campo">
+                <label>Número de etapas</label>
+                <input type="text" id="etapasPadrao" readonly>
+                <span class="unidade">total de etapas no dia</span>
+              </div>
+              <div class="campo">
+                <label id="taxaPadraoLabel">mL/hora</label>
+                <input type="text" id="taxaPadrao" class="resultado-verde" readonly>
+                <span class="unidade" id="taxaPadraoInfo">taxa contínua das 24 horas</span>
+              </div>
+              <div class="campo">
+                <label>S.G. 5% por etapa</label>
+                <input type="text" id="sg5Padrao" class="resultado-verde" readonly>
+                <span class="unidade">mL por etapa calculado</span>
+              </div>
+              <div class="campo">
+                <label>NaCl 20% por etapa</label>
+                <input type="text" id="nacl20Padrao" class="resultado-amarelo" readonly>
+                <span class="unidade">mL por etapa calculado</span>
+              </div>
+              <div class="campo">
+                <label>KCl 10% por etapa</label>
+                <input type="text" id="kcl10Padrao" class="resultado-amarelo" readonly>
+                <span class="unidade">mL por etapa calculado</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-badge">
+            Esta seção mostra a <strong>solução padrão</strong> (500 + 20 + 10), distribuída com o <strong>mesmo número de etapas</strong> e a <strong>mesma taxa de infusão</strong> calculados para o paciente.
+          </div>
+
+          <div class="holliday-alert" role="note">
+            <strong>Observação para infusão</strong>
+            A solução padrão representa o <strong>preparo da etapa</strong>. Quando o volume preparado exceder o volume calculado para o paciente, <strong>não infundir obrigatoriamente a etapa inteira</strong>. Respeite o <strong>mL/hora calculado</strong> e o volume total prescrito para 24 horas.
+          </div>
+        </div>
+      </div>
+
+
+      <div class="secao card-minimizable" id="realPreparationCard" data-minimizable-card>
+        <button type="button" class="secao-header card-minimizable-header" id="realPreparationToggle" data-minimizable-toggle aria-expanded="true" aria-controls="realPreparationBody">
+          <span>Solução Isotônica Personalizada</span>
+          <span class="card-minimizable-arrow" aria-hidden="true">▸</span>
+        </button>
+        <div class="secao-body card-minimizable-body" id="realPreparationBody">
           <div class="bloco-padrao">
             <div class="grid-5">
               <div class="campo">
@@ -339,52 +430,59 @@
       </div>
 
       <div class="secao">
-        <div class="secao-header">Preparo de Etapas Padrão</div>
-        <div class="secao-body">
+        <div class="secao-header">Observações</div>
+        <div class="secao-body obs">
+          <ul>
+            <li>O cálculo do volume diário segue o esquema de Holliday–Segar: 100 mL/kg até 10 kg; 1000 mL + 50 mL/kg entre 10 e 20 kg; 1500 mL + 20 mL/kg acima de 20 kg, com máximo de 3000 mL/dia.</li>
+            
+            <li>A seção <strong>Solução Isotônica Personalizada</strong> exibe o volume real calculado por etapa. A seção <strong>Solução Isotônica Padrão</strong> exibe a solução padrão (500 + 20 + 10), mantendo o mesmo número de etapas e a mesma taxa de infusão calculados para o paciente.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="secao card-minimizable is-minimized" id="classicHydrationCard" data-minimizable-card>
+        <button type="button" class="secao-header card-minimizable-header" id="classicHydrationToggle" data-minimizable-toggle aria-expanded="false" aria-controls="classicHydrationBody">
+          <span>Solução Clássica Holliday-Segar</span>
+          <span class="card-minimizable-arrow" aria-hidden="true">▸</span>
+        </button>
+        <div class="secao-body card-minimizable-body" id="classicHydrationBody">
           <div class="bloco-padrao">
             <div class="grid-5">
               <div class="campo">
                 <label>Número de etapas</label>
-                <input type="text" id="etapasPadrao" readonly>
-                <span class="unidade">mesmo total de etapas do preparo real</span>
+                <input type="text" id="classicStages" readonly>
+                <span class="unidade">total de etapas no dia</span>
               </div>
               <div class="campo">
-                <label id="taxaPadraoLabel">mL/hora</label>
-                <input type="text" id="taxaPadrao" class="resultado-verde" readonly>
-                <span class="unidade" id="taxaPadraoInfo">infusão da solução padrão na mesma taxa calculada</span>
+                <label id="classicRateLabel">mL/hora</label>
+                <input type="text" id="classicRate" class="resultado-verde" readonly>
+                <span class="unidade" id="classicRateInfo">taxa contínua das 24 horas</span>
               </div>
               <div class="campo">
-                <label>S.G. 5%</label>
-                <input type="text" id="sg5Padrao" class="resultado-verde" readonly>
-                <span class="unidade">volume fixo da solução padrão</span>
+                <label>S.G. 5% por etapa</label>
+                <input type="text" id="classicSg5Stage" class="resultado-verde" readonly>
+                <span class="unidade">mL por etapa calculado</span>
               </div>
               <div class="campo">
-                <label>NaCl 20%</label>
-                <input type="text" id="nacl20Padrao" class="resultado-amarelo" readonly>
-                <span class="unidade">volume fixo da solução padrão</span>
+                <label>NaCl 20% por etapa</label>
+                <input type="text" id="classicNacl20Stage" class="resultado-amarelo" readonly>
+                <span class="unidade">mL por etapa calculado</span>
               </div>
               <div class="campo">
-                <label>KCl 10%</label>
-                <input type="text" id="kcl10Padrao" class="resultado-amarelo" readonly>
-                <span class="unidade">volume fixo da solução padrão</span>
+                <label>KCl 10% por etapa</label>
+                <input type="text" id="classicKcl10Stage" class="resultado-amarelo" readonly>
+                <span class="unidade">mL por etapa calculado</span>
               </div>
             </div>
           </div>
 
-          <div class="info-badge">
-            Esta seção mostra a <strong>solução padrão</strong> (500 + 20 + 10), distribuída com o <strong>mesmo número de etapas</strong> e a <strong>mesma taxa de infusão</strong> calculados para o paciente.
-          </div>
-        </div>
-      </div>
-
-      <div class="secao">
-        <div class="secao-header">Observações</div>
-        <div class="secao-body obs">
-          <ul>
-            <li>O cálculo do volume diário segue o esquema de Holliday–Segar: 100 mL/kg até 10 kg; 1000 mL + 50 mL/kg entre 10 e 20 kg; 1500 mL + 20 mL/kg acima de 20 kg, com máximo de 2400 mL/dia.</li>
+          <div class="holliday-alert" role="note">
+            <strong>Atenção clínica</strong>
+            Alternativa clássica de manutenção baseada em Holliday-Segar, com sódio 3-2-1 mEq/kg/dia e potássio 2-1-0,5 mEq/kg/dia, convertidos em NaCl 20% e KCl 10% por etapa.
+            Em pacientes pediátricos hospitalizados, considerar que diretrizes atuais geralmente favorecem soluções isotônicas de manutenção, salvo contexto clínico específico.
+            <br><br>
             
-            <li>A seção <strong>Preparo Real por Etapa</strong> exibe o volume real calculado por etapa. A seção <strong>Preparo de Etapas Padrão</strong> exibe a solução padrão (500 + 20 + 10), mantendo o mesmo número de etapas e a mesma taxa de infusão calculados para o paciente.</li>
-          </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -399,11 +497,13 @@
 
       // constants
       const CONFIG = Object.freeze({
-        minimumWeightKg: 3.5,
-        maximumWeightKg: 200,
-        maximumDailyVolumeMl: 2400,
+        minimumWeightKg: 3,
+        maximumWeightKg: 95,
+        maximumDailyVolumeMl: 3000,
         referenceStageVolumeMl: 530,
-        allowedStageCountsPerDay: Object.freeze([1, 2, 3, 4, 6, 8, 12, 24]),
+        nacl20MeqPerMl: 3.4,
+        kcl10MeqPerMl: 1.34,
+        allowedStageCountsPerDay: Object.freeze([1, 2, 3, 4, 6]),
         standardSolution: Object.freeze({
           totalMl: 530,
           sg5Ml: 500,
@@ -427,6 +527,10 @@
         weight: document.getElementById('peso'),
         rateUnit: document.getElementById('unidadeTaxa'),
         alertBox: document.getElementById('alerta'),
+        realPreparationCard: document.getElementById('realPreparationCard'),
+        realPreparationToggle: document.getElementById('realPreparationToggle'),
+        standardPreparationCard: document.getElementById('standardPreparationCard'),
+        standardPreparationToggle: document.getElementById('standardPreparationToggle'),
         stages: document.getElementById('etapas'),
         rate: document.getElementById('taxa'),
         rateLabel: document.getElementById('taxaLabel'),
@@ -440,7 +544,16 @@
         standardRateInfo: document.getElementById('taxaPadraoInfo'),
         sg5Standard: document.getElementById('sg5Padrao'),
         nacl20Standard: document.getElementById('nacl20Padrao'),
-        kcl10Standard: document.getElementById('kcl10Padrao')
+        kcl10Standard: document.getElementById('kcl10Padrao'),
+        classicCard: document.getElementById('classicHydrationCard'),
+        classicToggle: document.getElementById('classicHydrationToggle'),
+        classicRate: document.getElementById('classicRate'),
+        classicRateLabel: document.getElementById('classicRateLabel'),
+        classicRateInfo: document.getElementById('classicRateInfo'),
+        classicStages: document.getElementById('classicStages'),
+        classicSg5Stage: document.getElementById('classicSg5Stage'),
+        classicNacl20Stage: document.getElementById('classicNacl20Stage'),
+        classicKcl10Stage: document.getElementById('classicKcl10Stage')
       };
 
       // state
@@ -534,7 +647,7 @@
         const clampedWeight = clampWeight(parsedWeight);
 
         if (clampedWeight === CONFIG.maximumWeightKg) {
-          DOM.weight.value = '200';
+          DOM.weight.value = '95';
         } else if (clampedWeight === CONFIG.minimumWeightKg) {
           DOM.weight.value = formatNumber(CONFIG.minimumWeightKg, 3);
         }
@@ -613,6 +726,43 @@
         };
       }
 
+
+      function calculateClassicSodiumMeq(weightKg) {
+        if (weightKg <= 10) return weightKg * 3;
+        if (weightKg <= 20) return 30 + ((weightKg - 10) * 2);
+        return 50 + ((weightKg - 20) * 1);
+      }
+
+      function calculateClassicPotassiumMeq(weightKg) {
+        if (weightKg <= 10) return weightKg * 2;
+        if (weightKg <= 20) return 20 + ((weightKg - 10) * 1);
+        return 30 + ((weightKg - 20) * 0.5);
+      }
+
+      function calculateClassicHydration(weightKg) {
+        const dailyVolumeMl = calculateDailyMaintenanceVolume(weightKg);
+        const sodiumMeqPerDay = calculateClassicSodiumMeq(weightKg);
+        const potassiumMeqPerDay = calculateClassicPotassiumMeq(weightKg);
+        const nacl20MlPerDay = sodiumMeqPerDay / CONFIG.nacl20MeqPerMl;
+        const kcl10MlPerDay = potassiumMeqPerDay / CONFIG.kcl10MeqPerMl;
+        const sg5MlPerDay = Math.max(0, dailyVolumeMl - nacl20MlPerDay - kcl10MlPerDay);
+
+        // Desvincula as etapas clássicas da referência global de 530 mL da solução isotónica.
+        // Calcula as etapas dinamicamente garantindo que o S.G. 5% nunca exceda a capacidade física de 500 mL.
+        const minimumStagesNeeded = Math.max(1, Math.ceil(sg5MlPerDay / 500));
+        const stages = CONFIG.allowedStageCountsPerDay.find((c) => c >= minimumStagesNeeded) ||
+                       CONFIG.allowedStageCountsPerDay[CONFIG.allowedStageCountsPerDay.length - 1];
+
+        return {
+          dailyVolumeMl,
+          rateMlPerHour: dailyVolumeMl / 24,
+          stages,
+          sg5MlPerStage: sg5MlPerDay / stages,
+          nacl20MlPerStage: nacl20MlPerDay / stages,
+          kcl10MlPerStage: kcl10MlPerDay / stages
+        };
+      }
+
       function calculateHydration(weightKg, rateUnit) {
         const validationError = validateWeight(weightKg);
         if (validationError) {
@@ -643,13 +793,20 @@
         DOM.sg5Standard.value = '';
         DOM.nacl20Standard.value = '';
         DOM.kcl10Standard.value = '';
+        if (DOM.classicRate) DOM.classicRate.value = '';
+        if (DOM.classicStages) DOM.classicStages.value = '';
+        if (DOM.classicSg5Stage) DOM.classicSg5Stage.value = '';
+        if (DOM.classicNacl20Stage) DOM.classicNacl20Stage.value = '';
+        if (DOM.classicKcl10Stage) DOM.classicKcl10Stage.value = '';
       }
 
       function resetRateLabels() {
         DOM.rateLabel.textContent = CONFIG.fieldDefaults.rateLabel;
         DOM.rateInfo.textContent = CONFIG.fieldDefaults.rateInfo;
         DOM.standardRateLabel.textContent = CONFIG.fieldDefaults.rateLabel;
-        DOM.standardRateInfo.textContent = 'infusão da solução padrão na mesma taxa calculada';
+        DOM.standardRateInfo.textContent = 'taxa contínua das 24 horas';
+        if (DOM.classicRateLabel) DOM.classicRateLabel.textContent = CONFIG.fieldDefaults.rateLabel;
+        if (DOM.classicRateInfo) DOM.classicRateInfo.textContent = CONFIG.fieldDefaults.rateInfo;
       }
 
       function showError(message) {
@@ -660,6 +817,21 @@
       function clearError() {
         DOM.alertBox.textContent = '';
         DOM.alertBox.style.display = 'none';
+      }
+
+
+      function renderClassicHydration(result) {
+        if (!DOM.classicRate || !result || !(result.weightKg > 0)) return;
+        const classic = calculateClassicHydration(result.weightKg);
+        const selectedRateUnit = DOM.rateUnit ? DOM.rateUnit.value : 'mlh';
+        const classicRate = calculateRate(classic.dailyVolumeMl, selectedRateUnit);
+        DOM.classicRate.value = classicRate.valueText;
+        if (DOM.classicRateLabel) DOM.classicRateLabel.textContent = classicRate.label;
+        if (DOM.classicRateInfo) DOM.classicRateInfo.textContent = classicRate.info;
+        DOM.classicStages.value = classic.stages.toLocaleString('pt-BR');
+        DOM.classicSg5Stage.value = `${formatNumber(classic.sg5MlPerStage, 1)} mL`;
+        DOM.classicNacl20Stage.value = `${formatNumber(classic.nacl20MlPerStage, 1)} mL`;
+        DOM.classicKcl10Stage.value = `${formatNumber(classic.kcl10MlPerStage, 1)} mL`;
       }
 
       function renderCalculation(result) {
@@ -675,10 +847,11 @@
         DOM.standardStages.value = stagePreparation.stages.toLocaleString('pt-BR');
         DOM.standardRate.value = rate.valueText;
         DOM.standardRateLabel.textContent = rate.label;
-        DOM.standardRateInfo.textContent = 'infusão da solução padrão na mesma taxa calculada';
+        DOM.standardRateInfo.textContent = 'taxa contínua das 24 horas';
         DOM.sg5Standard.value = formatNumber(CONFIG.standardSolution.sg5Ml, 0);
         DOM.nacl20Standard.value = formatNumber(CONFIG.standardSolution.nacl20Ml, 0);
         DOM.kcl10Standard.value = formatNumber(CONFIG.standardSolution.kcl10Ml, 0);
+        renderClassicHydration(result);
       }
 
       function resetOutputState() {
@@ -738,8 +911,8 @@
         const cases = [
           {
             name: 'mínimo válido',
-            weightKg: 3.5,
-            expectedDailyVolumeMl: 350,
+            weightKg: 3,
+            expectedDailyVolumeMl: 300,
             expectedStages: 1
           },
           {
@@ -762,8 +935,8 @@
           },
           {
             name: 'teto de volume diário',
-            weightKg: 70,
-            expectedDailyVolumeMl: 2400,
+            weightKg: 95,
+            expectedDailyVolumeMl: 3000,
             expectedStages: 6
           }
         ];
@@ -794,6 +967,28 @@
         };
       }
 
+
+      function bindMinimizableCard(card, toggle) {
+        if (!card || !toggle) return;
+
+        // Sincroniza o estado inicial: aberto quando não tem is-minimized; fechado quando tem.
+        toggle.setAttribute('aria-expanded', String(!card.classList.contains('is-minimized')));
+
+        toggle.addEventListener('click', () => {
+          const isMinimized = card.classList.toggle('is-minimized');
+          toggle.setAttribute('aria-expanded', String(!isMinimized));
+        });
+      }
+
+      function bindMinimizableCards() {
+        const minimizableCards = Array.from(document.querySelectorAll('[data-minimizable-card], .card-minimizable'));
+
+        minimizableCards.forEach((card) => {
+          const toggle = card.querySelector('[data-minimizable-toggle], .card-minimizable-header');
+          bindMinimizableCard(card, toggle);
+        });
+      }
+
       // bootstrap
       function bootstrap() {
         DOM.form.addEventListener('submit', (event) => {
@@ -817,6 +1012,8 @@
           updateAutomatically();
         });
 
+        bindMinimizableCards();
+
         DOM.form.addEventListener('reset', () => {
           window.setTimeout(() => {
             clearError();
@@ -839,6 +1036,9 @@
         resolveStageCount,
         buildStagePreparation,
         calculateHydration,
+        calculateClassicSodiumMeq,
+        calculateClassicPotassiumMeq,
+        calculateClassicHydration,
         runSelfTests
       };
 
