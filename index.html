@@ -330,6 +330,31 @@
             </div>
           </div>
 
+          <div class="grid-2" style="margin-top:14px;">
+            <div class="campo">
+              <label for="nhdPercent">NHD utilizada</label>
+              <select id="nhdPercent" name="nhdPercent">
+                <option value="10">10%</option>
+                <option value="20">20%</option>
+                <option value="30">30%</option>
+                <option value="40">40%</option>
+                <option value="50">50%</option>
+                <option value="60">60%</option>
+                <option value="70">70%</option>
+                <option value="80">80%</option>
+                <option value="90">90%</option>
+                <option value="100" selected>100%</option>
+                <option value="110">110%</option>
+                <option value="120">120%</option>
+                <option value="130">130%</option>
+                <option value="140">140%</option>
+                <option value="150">150%</option>
+                <option value="160">160%</option>
+              </select>
+              <span class="unidade">Necessidades Hídricas Diárias — S.G.5% + NaCl 20% + KCl 10% — de 10 em 10%</span>
+            </div>
+          </div>
+
           <div class="btn-row">
             <button type="submit" class="btn btn-primary" id="calcularBtn">▶ Calcular</button>
             <button type="reset" class="btn btn-reset">🔄 Limpar</button>
@@ -429,20 +454,9 @@
         </div>
       </div>
 
-      <div class="secao">
-        <div class="secao-header">Observações</div>
-        <div class="secao-body obs">
-          <ul>
-            <li>O cálculo do volume diário segue o esquema de Holliday–Segar: 100 mL/kg até 10 kg; 1000 mL + 50 mL/kg entre 10 e 20 kg; 1500 mL + 20 mL/kg acima de 20 kg, com máximo de 3000 mL/dia.</li>
-            
-            <li>A seção <strong>Solução Isotônica Personalizada</strong> exibe o volume real calculado por etapa. A seção <strong>Solução Isotônica Padrão</strong> exibe a solução padrão (500 + 20 + 10), mantendo o mesmo número de etapas e a mesma taxa de infusão calculados para o paciente.</li>
-          </ul>
-        </div>
-      </div>
-
       <div class="secao card-minimizable is-minimized" id="classicHydrationCard" data-minimizable-card>
         <button type="button" class="secao-header card-minimizable-header" id="classicHydrationToggle" data-minimizable-toggle aria-expanded="false" aria-controls="classicHydrationBody">
-          <span>Solução Clássica Holliday-Segar</span>
+          <span>Hidratação Clássica</span>
           <span class="card-minimizable-arrow" aria-hidden="true">▸</span>
         </button>
         <div class="secao-body card-minimizable-body" id="classicHydrationBody">
@@ -478,13 +492,26 @@
 
           <div class="holliday-alert" role="note">
             <strong>Atenção clínica</strong>
-            Alternativa clássica de manutenção baseada em Holliday-Segar, com sódio 3-2-1 mEq/kg/dia e potássio 2-1-0,5 mEq/kg/dia, convertidos em NaCl 20% e KCl 10% por etapa.
+            Alternativa clássica de manutenção baseada em Holliday-Segar, com sódio 3-2-1 mEq/kg/dia e potássio 2-1-0,5 mEq/kg/dia, convertidos em NaCl 20% e KCl 10% por etapa, respeitando teto de 125 mEq/dia para sódio e 67,5 mEq/dia para potássio.
             Em pacientes pediátricos hospitalizados, considerar que diretrizes atuais geralmente favorecem soluções isotônicas de manutenção, salvo contexto clínico específico.
             <br><br>
             
           </div>
         </div>
       </div>
+
+      <div class="secao">
+        <div class="secao-header">Observações</div>
+        <div class="secao-body obs">
+          <ul>
+            <li>O cálculo do volume diário segue o esquema de Holliday–Segar: 100 mL/kg até 10 kg; 1000 mL + 50 mL/kg entre 10 e 20 kg; 1500 mL + 20 mL/kg acima de 20 kg, com máximo de 3000 mL/dia.</li>
+            
+            <li>A seção <strong>Solução Isotônica Personalizada</strong> exibe o volume real calculado por etapa após aplicar a porcentagem de NHD. As etapas permitidas são 1, 2, 3, 4, 6, 8 e 12, escolhidas conforme necessário para manter o S.G. 5% por etapa sem ultrapassar 500 mL. A seção <strong>Solução Isotônica Padrão</strong> exibe a solução padrão (500 + 20 + 10), mantendo o mesmo número de etapas e a mesma taxa de infusão calculados para o paciente. A aba <strong>Hidratação Clássica</strong> calcula SG 5%, NaCl 20% e KCl 10% pelo esquema clássico com tetos de eletrólitos.</li>
+          </ul>
+        </div>
+      </div>
+
+      
     </div>
   </form>
 
@@ -500,10 +527,14 @@
         minimumWeightKg: 3,
         maximumWeightKg: 95,
         maximumDailyVolumeMl: 3000,
+        minimumNhdPercent: 10,
+        maximumNhdPercent: 160,
         referenceStageVolumeMl: 530,
         nacl20MeqPerMl: 3.4,
         kcl10MeqPerMl: 1.34,
-        allowedStageCountsPerDay: Object.freeze([1, 2, 3, 4, 6]),
+        classicSodiumMaxMeqPerDay: 125,
+        classicPotassiumMaxMeqPerDay: 67.5,
+        allowedStageCountsPerDay: Object.freeze([1, 2, 3, 4, 6, 8, 12]),
         standardSolution: Object.freeze({
           totalMl: 530,
           sg5Ml: 500,
@@ -525,6 +556,7 @@
       const DOM = {
         form: document.getElementById('formHViso'),
         weight: document.getElementById('peso'),
+        nhdPercent: document.getElementById('nhdPercent'),
         rateUnit: document.getElementById('unidadeTaxa'),
         alertBox: document.getElementById('alerta'),
         realPreparationCard: document.getElementById('realPreparationCard'),
@@ -604,6 +636,44 @@
           return `O valor máximo para peso é ${formatNumber(CONFIG.maximumWeightKg, 0)} kg.`;
         }
         return null;
+      }
+
+      function validateNhdPercent(nhdPercent) {
+        if (!Number.isFinite(nhdPercent)) {
+          return 'Informe uma porcentagem válida para a NHD.';
+        }
+        if (nhdPercent < CONFIG.minimumNhdPercent) {
+          return `A porcentagem da NHD não pode ser menor que ${formatNumber(CONFIG.minimumNhdPercent, 0)}%.`;
+        }
+        if (nhdPercent > CONFIG.maximumNhdPercent) {
+          return `A porcentagem da NHD não pode ser maior que ${formatNumber(CONFIG.maximumNhdPercent, 0)}%.`;
+        }
+        return null;
+      }
+
+      function sanitizePercentInput(rawValue) {
+        const rawText = String(rawValue ?? '').replace(/\s+/g, '');
+        let sanitized = '';
+        let separatorUsed = false;
+
+        for (const char of rawText) {
+          if (/\d/.test(char)) {
+            sanitized += char;
+            continue;
+          }
+
+          if ((char === ',' || char === '.') && !separatorUsed) {
+            sanitized += char;
+            separatorUsed = true;
+          }
+        }
+
+        return sanitized.slice(0, 5);
+      }
+
+      function applyNhdPercentFieldRules() {
+        const parsedPercent = parseLocaleNumber(DOM.nhdPercent.value);
+        return Number.isFinite(parsedPercent) ? parsedPercent : NaN;
       }
 
       function sanitizeWeightInput(rawValue) {
@@ -739,15 +809,22 @@
         return 30 + ((weightKg - 20) * 0.5);
       }
 
-      function calculateClassicHydration(weightKg) {
-        const dailyVolumeMl = calculateDailyMaintenanceVolume(weightKg);
-        const sodiumMeqPerDay = calculateClassicSodiumMeq(weightKg);
-        const potassiumMeqPerDay = calculateClassicPotassiumMeq(weightKg);
+      function calculateClassicHydration(weightKg, nhdPercent = 100) {
+        const nhdFactor = nhdPercent / 100;
+        const dailyVolumeMl = calculateDailyMaintenanceVolume(weightKg) * nhdFactor;
+        const sodiumMeqPerDay = Math.min(
+          calculateClassicSodiumMeq(weightKg) * nhdFactor,
+          CONFIG.classicSodiumMaxMeqPerDay
+        );
+        const potassiumMeqPerDay = Math.min(
+          calculateClassicPotassiumMeq(weightKg) * nhdFactor,
+          CONFIG.classicPotassiumMaxMeqPerDay
+        );
         const nacl20MlPerDay = sodiumMeqPerDay / CONFIG.nacl20MeqPerMl;
         const kcl10MlPerDay = potassiumMeqPerDay / CONFIG.kcl10MeqPerMl;
         const sg5MlPerDay = Math.max(0, dailyVolumeMl - nacl20MlPerDay - kcl10MlPerDay);
 
-        // Desvincula as etapas clássicas da referência global de 530 mL da solução isotónica.
+        // Desvincula as etapas clássicas da referência global de 530 mL da solução isotônica.
         // Calcula as etapas dinamicamente garantindo que o S.G. 5% nunca exceda a capacidade física de 500 mL.
         const minimumStagesNeeded = Math.max(1, Math.ceil(sg5MlPerDay / 500));
         const stages = CONFIG.allowedStageCountsPerDay.find((c) => c >= minimumStagesNeeded) ||
@@ -757,24 +834,29 @@
           dailyVolumeMl,
           rateMlPerHour: dailyVolumeMl / 24,
           stages,
-          sg5MlPerStage: sg5MlPerDay / stages,
-          nacl20MlPerStage: nacl20MlPerDay / stages,
-          kcl10MlPerStage: kcl10MlPerDay / stages
+          sg5MlPerStage: stages > 0 ? sg5MlPerDay / stages : 0,
+          nacl20MlPerStage: stages > 0 ? nacl20MlPerDay / stages : 0,
+          kcl10MlPerStage: stages > 0 ? kcl10MlPerDay / stages : 0,
+          sodiumMeqPerDay,
+          potassiumMeqPerDay
         };
       }
 
-      function calculateHydration(weightKg, rateUnit) {
-        const validationError = validateWeight(weightKg);
+      function calculateHydration(weightKg, rateUnit, nhdPercent = 100) {
+        const validationError = validateWeight(weightKg) || validateNhdPercent(nhdPercent);
         if (validationError) {
           throw new Error(validationError);
         }
 
-        const dailyVolumeMl = calculateDailyMaintenanceVolume(weightKg);
+        const baseDailyVolumeMl = calculateDailyMaintenanceVolume(weightKg);
+        const dailyVolumeMl = baseDailyVolumeMl * (nhdPercent / 100);
         const stagePreparation = buildStagePreparation(dailyVolumeMl);
         const rate = calculateRate(dailyVolumeMl, rateUnit);
 
         return {
           weightKg,
+          nhdPercent,
+          baseDailyVolumeMl,
           dailyVolumeMl,
           rate,
           stagePreparation
@@ -822,7 +904,7 @@
 
       function renderClassicHydration(result) {
         if (!DOM.classicRate || !result || !(result.weightKg > 0)) return;
-        const classic = calculateClassicHydration(result.weightKg);
+        const classic = calculateClassicHydration(result.weightKg, result.nhdPercent);
         const selectedRateUnit = DOM.rateUnit ? DOM.rateUnit.value : 'mlh';
         const classicRate = calculateRate(classic.dailyVolumeMl, selectedRateUnit);
         DOM.classicRate.value = classicRate.valueText;
@@ -859,16 +941,35 @@
         resetRateLabels();
       }
 
+      function scrollToRealPreparationCard() {
+        if (!DOM.realPreparationCard) return;
+
+        if (DOM.realPreparationCard.classList.contains('is-minimized')) {
+          DOM.realPreparationCard.classList.remove('is-minimized');
+          if (DOM.realPreparationToggle) {
+            DOM.realPreparationToggle.setAttribute('aria-expanded', 'true');
+          }
+        }
+
+        window.requestAnimationFrame(() => {
+          DOM.realPreparationCard.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        });
+      }
+
       // event handlers
       function runCalculation() {
         clearError();
         clearResults();
 
         const weightKg = applyWeightFieldRules(true);
+        const nhdPercent = applyNhdPercentFieldRules();
         const rateUnit = DOM.rateUnit.value;
 
         try {
-          const result = calculateHydration(weightKg, rateUnit);
+          const result = calculateHydration(weightKg, rateUnit, nhdPercent);
           STATE.lastCalculation = result;
           renderCalculation(result);
           return result;
@@ -883,7 +984,7 @@
       function updateAutomatically() {
         clearError();
 
-        if (!DOM.weight.value.trim()) {
+        if (!DOM.weight.value.trim() || !DOM.nhdPercent.value.trim()) {
           STATE.lastCalculation = null;
           resetOutputState();
           return;
@@ -944,7 +1045,7 @@
         const failures = [];
 
         cases.forEach((testCase) => {
-          const result = calculateHydration(testCase.weightKg, 'mlh');
+          const result = calculateHydration(testCase.weightKg, 'mlh', 100);
           const componentsSum =
             result.stagePreparation.sg5Ml +
             result.stagePreparation.nacl20Ml +
@@ -960,6 +1061,38 @@
             failures.push(`${testCase.name}: soma dos componentes não fecha o volume por etapa.`);
           }
         });
+
+        const halfNhd = calculateHydration(10, 'mlh', 50);
+        if (Math.abs(halfNhd.dailyVolumeMl - 500) > 1e-9) {
+          failures.push('NHD 50%: volume diário inesperado.');
+        }
+        if (halfNhd.stagePreparation.stages !== 1) {
+          failures.push('NHD 50%: número de etapas inesperado.');
+        }
+
+        const classicCapped = calculateClassicHydration(95, 100);
+        if (classicCapped.sodiumMeqPerDay > CONFIG.classicSodiumMaxMeqPerDay + 1e-9) {
+          failures.push('Hidratação clássica: teto de sódio não aplicado.');
+        }
+        if (classicCapped.potassiumMeqPerDay > CONFIG.classicPotassiumMaxMeqPerDay + 1e-9) {
+          failures.push('Hidratação clássica: teto de potássio não aplicado.');
+        }
+
+        const highNhd = calculateHydration(95, 'mlh', 160);
+        if (highNhd.stagePreparation.stages !== 12) {
+          failures.push('NHD 160% em 95 kg: deveria usar 12 etapas.');
+        }
+        if (highNhd.stagePreparation.sg5Ml > 500 + 1e-9) {
+          failures.push('NHD 160% em 95 kg: S.G. 5% por etapa ultrapassou 500 mL.');
+        }
+
+        const classicHighNhd = calculateClassicHydration(95, 160);
+        if (classicHighNhd.stages !== 12) {
+          failures.push('Hidratação clássica 160% em 95 kg: deveria usar 12 etapas.');
+        }
+        if (classicHighNhd.sg5MlPerStage > 500 + 1e-9) {
+          failures.push('Hidratação clássica 160% em 95 kg: S.G. 5% por etapa ultrapassou 500 mL.');
+        }
 
         return {
           ok: failures.length === 0,
@@ -993,7 +1126,10 @@
       function bootstrap() {
         DOM.form.addEventListener('submit', (event) => {
           event.preventDefault();
-          runCalculation();
+          const result = runCalculation();
+          if (result) {
+            scrollToRealPreparationCard();
+          }
         });
 
         DOM.weight.addEventListener('input', handleWeightInput);
@@ -1005,8 +1141,12 @@
           applyWeightFieldRules(true);
           updateAutomatically();
         });
+        DOM.nhdPercent.addEventListener('change', () => {
+          applyNhdPercentFieldRules();
+          updateAutomatically();
+        });
         DOM.rateUnit.addEventListener('change', () => {
-          if (document.activeElement === DOM.weight) {
+          if (document.activeElement === DOM.weight || document.activeElement === DOM.nhdPercent) {
             return;
           }
           updateAutomatically();
@@ -1030,6 +1170,7 @@
         parseLocaleNumber,
         formatNumber,
         validateWeight,
+        validateNhdPercent,
         calculateDailyMaintenanceVolume,
         calculateRate,
         calculateStageComponents,
