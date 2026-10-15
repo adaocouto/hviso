@@ -1,5 +1,8 @@
 <!-- NomeDoApp = "Hidratação Isotônica" -->
-<!-- AndroidVersionCode = "262561910"; Timestamp = "2026-09-13T19:10:07-03:00" -->
+<!-- AndroidVersionName = "1.11.10.11" -->
+<!-- VersionName = "1.11.10.11" -->
+<!-- VersionCode = "262840821" -->
+<!-- AndroidVersionCode = "262840821"; Timestamp = "2026-09-13T19:10:07-03:00" -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -99,6 +102,7 @@
       letter-spacing: 0.3px;
     }
     .campo input, .campo select {
+      min-height: 44px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 0.96rem;
       padding: 9px 10px;
@@ -133,9 +137,12 @@
     }
     .campo .unidade {
       font-size: 0.7rem;
-      color: #94a3b8;
+      color: #475569;
       margin-top: 1px;
     }
+    .campo input[aria-invalid="true"] { border-color: var(--vermelho); }
+    .field-error { color: var(--vermelho); font-size: 0.8rem; line-height: 1.4; }
+    .calculation-summary { color: #475569; font-size: 0.82rem; line-height: 1.45; margin-bottom: 10px; }
 
     .btn-row {
       display: flex;
@@ -144,6 +151,7 @@
       flex-wrap: wrap;
     }
     .btn {
+      min-height: 44px;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
       font-size: 0.85rem;
       font-weight: 700;
@@ -156,11 +164,17 @@
       touch-action: manipulation;
     }
     .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.5; cursor: default; transform: none; }
     .btn-primary {
       background: var(--azul);
       color: #fff;
     }
     .btn-primary:hover { background: var(--azul-med); }
+    .btn-secondary {
+      background: var(--azul);
+      color: #fff;
+    }
+    .btn-secondary:hover { background: var(--azul-med); }
     .btn-reset {
       background: #f1f5f9;
       color: #64748b;
@@ -230,7 +244,7 @@
       width: 100%;
       border: 0;
       border-radius: 0;
-      min-height: 0;
+      min-height: 44px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -274,13 +288,14 @@
       display:block;
       width:100%;
       max-width:none;
-      min-height:165px;
+      min-height:300px;
+      overflow-y:auto;
       resize:vertical;
       margin:0;
       border:1px solid #bfd2e4;
       border-radius:14px;
       padding:14px 16px;
-      background:#fcfeff;
+      background:linear-gradient(180deg,#fffdfa 0%,#fff8dd 100%);
       color:var(--texto);
       line-height:1.5;
       font-family:inherit;
@@ -291,6 +306,8 @@
       border-color:var(--azul-med);
       box-shadow:0 0 0 4px rgba(37,99,168,.12);
     }
+    .prontuario-textarea[hidden] { display:none; }
+    .prontuario-textarea.is-recalculated { background: #bfdbfe; }
     .prontuario-actions{
       display:grid;
       grid-template-columns:1fr;
@@ -334,7 +351,7 @@
     .prontuario-toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
     @media(max-width:560px){
       .prontuario-textarea{
-        min-height:180px;
+        min-height:320px;
         padding:13px 14px;
         font-size:.9rem;
       }
@@ -403,7 +420,7 @@
     /* Saída compacta: preparo por etapa sem duplicar campos somente leitura */
     .preparo-hv-card {
       border: 1px solid #bfdbfe;
-      background: #f8fbff;
+      background: linear-gradient(180deg,#fffdfa 0%,#fff8dd 100%);
       border-radius: 12px;
       padding: 14px;
     }
@@ -460,6 +477,11 @@
       .preparo-hv-row { padding: 8px 0; }
     }
 
+  
+    #standardPrescriptionText,
+    #personalPrescriptionText {
+      min-height: 520px;
+    }
   </style>
 </head>
 <body>
@@ -477,11 +499,12 @@
           <div class="grid-2">
             <div class="campo">
               <label for="peso">Peso</label>
-              <input type="text" id="peso" name="peso" inputmode="decimal" placeholder="Ex.: 12,5" value="4,800" maxlength="5">
-              <span class="unidade">kg (mínimo 3,000 e máximo 95) · cálculo ao sair do campo</span>
+              <input type="text" id="peso" name="peso" inputmode="numeric" enterkeyhint="done" placeholder="Ex.: 12,500" value="4,800" maxlength="6" aria-describedby="pesoHint pesoError" aria-invalid="false">
+              <span class="unidade" id="pesoHint">kg (mínimo 3,000 e máximo 95) · cálculo ao sair do campo</span>
+              <div class="field-error" id="pesoError" role="alert" hidden></div>
             </div>
             <div class="campo">
-              <label for="unidadeTaxa">Taxa</label>
+              <label for="unidadeTaxa">Unidade da velocidade de infusão</label>
               <select id="unidadeTaxa" name="unidadeTaxa">
                 <option value="mlh" selected>mL/h</option>
                 <option value="gtt">gotas/min (20 gotas/mL)</option>
@@ -515,6 +538,9 @@
               <span class="unidade">Necessidades Hídricas Diárias — S.G.5% + NaCl 20% + KCl 10% — de 10 em 10%</span>
             </div>
           </div>
+          <div class="btn-row">
+            <button type="reset" class="btn btn-reset" id="limparDados">Limpar</button>
+          </div>
 <div id="alerta" class="alerta" role="alert" aria-live="polite"></div>
         </div>
       </div>
@@ -547,6 +573,7 @@
         <div class="secao-body card-minimizable-body" id="realPreparationBody">
           <div class="preparo-hv-card" aria-live="polite">
             <h3>Preparo da hidratação — por etapa</h3>
+            <p id="personalCalculationSummary" class="calculation-summary" hidden></p>
             <div class="prontuario-content">
               <textarea id="personalPrescriptionText" rows="7" class="prontuario-textarea" readonly aria-label="Prescrição da solução isotônica personalizada"></textarea>
               <div class="prontuario-actions">
@@ -630,6 +657,7 @@
       const DOM = {
         form: document.getElementById('formHViso'),
         weight: document.getElementById('peso'),
+        weightError: document.getElementById('pesoError'),
         nhdPercent: document.getElementById('nhdPercent'),
         rateUnit: document.getElementById('unidadeTaxa'),
         alertBox: document.getElementById('alerta'),
@@ -643,6 +671,7 @@
         personalPrescriptionText: document.getElementById('personalPrescriptionText'),
         personalCopyPrescription: document.getElementById('personalCopyPrescription'),
         personalCopyStatus: document.getElementById('personalCopyStatus'),
+        personalSummary: document.getElementById('personalCalculationSummary'),
         classicCard: document.getElementById('classicHydrationCard'),
         classicToggle: document.getElementById('classicHydrationToggle'),
         classicPrescriptionText: document.getElementById('classicPrescriptionText'),
@@ -652,7 +681,13 @@
 
       // state
       const STATE = {
-        lastCalculation: null
+        lastCalculation: null,
+        weightDirty: false,
+        replaceWeightOnFirstEdit: false,
+        literalWeightInput: false,
+        revision: 0,
+        navigationTimer: null,
+        highlightTimers: {}
       };
 
       // parsers
@@ -739,23 +774,10 @@
       }
 
       function sanitizeWeightInput(rawValue) {
-        const rawText = String(rawValue ?? '').replace(/\s+/g, '');
-        let sanitized = '';
-        let separatorUsed = false;
-
-        for (const char of rawText) {
-          if (/\d/.test(char)) {
-            sanitized += char;
-            continue;
-          }
-
-          if ((char === ',' || char === '.') && !separatorUsed) {
-            sanitized += char;
-            separatorUsed = true;
-          }
-        }
-
-        return sanitized.slice(0, 5);
+        const digits = String(rawValue ?? '').replace(/\D/g, '').slice(0, 5);
+        if (digits.length <= 1) return digits;
+        if (digits.length <= 4) return digits.charAt(0) + ',' + digits.slice(1);
+        return digits.slice(0, 2) + ',' + digits.slice(2);
       }
 
       function clampWeight(weightKg) {
@@ -766,11 +788,6 @@
       }
 
       function applyWeightFieldRules(forceClamp = false) {
-        const sanitized = sanitizeWeightInput(DOM.weight.value);
-        if (DOM.weight.value !== sanitized) {
-          DOM.weight.value = sanitized;
-        }
-
         const parsedWeight = parseLocaleNumber(DOM.weight.value);
         if (!Number.isFinite(parsedWeight)) return NaN;
 
@@ -935,7 +952,43 @@
       }
 
       // ui renderers
+      function clearResultHighlights() {
+        Object.keys(STATE.highlightTimers).forEach((prefix) => {
+          window.clearTimeout(STATE.highlightTimers[prefix]);
+          DOM[`${prefix}PrescriptionText`].classList.remove('is-recalculated');
+        });
+        STATE.highlightTimers = {};
+      }
+
+      function refreshCopyButtons() {
+        ['standard', 'personal', 'classic'].forEach((prefix) => {
+          DOM[`${prefix}CopyPrescription`].disabled = STATE.weightDirty ||
+            !STATE.lastCalculation || !DOM[`${prefix}PrescriptionText`].value.trim();
+        });
+      }
+
+      function resizePrescriptionTextarea(textarea) {
+        if (!textarea || textarea.hidden || !textarea.offsetWidth) return;
+        textarea.style.height = 'auto';
+        const borderHeight = textarea.offsetHeight - textarea.clientHeight;
+        textarea.style.height = `${textarea.scrollHeight + borderHeight}px`;
+      }
+
+      function resizePrescriptionTextareas() {
+        ['standard', 'personal', 'classic'].forEach((prefix) => {
+          resizePrescriptionTextarea(DOM[`${prefix}PrescriptionText`]);
+        });
+      }
+
+      function setResultsPending(pending) {
+        ['standard', 'personal', 'classic'].forEach((prefix) => {
+          DOM[`${prefix}PrescriptionText`].hidden = pending;
+        });
+        DOM.personalSummary.hidden = pending || !DOM.personalSummary.textContent;
+      }
+
       function clearResults() {
+        clearResultHighlights();
         ['standard', 'personal', 'classic'].forEach((prefix) => {
           const textarea = DOM[`${prefix}PrescriptionText`];
           const status = DOM[`${prefix}CopyStatus`];
@@ -945,6 +998,11 @@
             status.classList.remove('show');
           }
         });
+        DOM.personalSummary.textContent = '';
+        DOM.personalSummary.hidden = true;
+        setResultsPending(false);
+        resizePrescriptionTextareas();
+        refreshCopyButtons();
       }
 
       function showError(message) {
@@ -962,6 +1020,9 @@
       function clearError() {
         DOM.alertBox.textContent = '';
         DOM.alertBox.style.display = 'none';
+        DOM.weightError.textContent = '';
+        DOM.weightError.hidden = true;
+        DOM.weight.setAttribute('aria-invalid', 'false');
       }
 
       function formatStageInterval(stages) {
@@ -980,20 +1041,49 @@
 
       function buildPreparationPrescriptionText(values) {
         const interval = formatStageInterval(values.stages);
+        const volumeLines = Number.isFinite(values.infusionVolumeMl)
+          ? [
+              `Volume preparado = ${formatNumber(values.totalMl, 2)} mL`,
+              `Volume a infundir nesta etapa = ${formatNumber(values.infusionVolumeMl, 2)} mL`
+            ]
+          : [`Volume Total = ${formatNumber(values.totalMl, 2)} mL`];
         return [
           `S.G. 5% - ${formatNumber(values.sg5Ml, 1)} mL`,
           `NaCl 20% - ${formatNumber(values.nacl20Ml, 1)} mL`,
           `KCl 10% - ${formatNumber(values.kcl10Ml, 1)} mL`,
           '',
-          `Volume Total = ${formatNumber(values.totalMl, 2)} mL`,
+          ...volumeLines,
           `Infundir a ${formatPrescriptionRate(values.rate)} de ${interval}/${interval} horas`
         ].join('\n');
       }
 
-      function setPreparationPrescription(prefix, values) {
+      function setPreparationPrescription(prefix, values, highlight = false) {
         const textarea = DOM[`${prefix}PrescriptionText`];
         if (!textarea) return;
-        textarea.value = buildPreparationPrescriptionText(values);
+        const titles = {
+          standard: 'Solução isotônica padrão',
+          personal: 'Solução isotônica personalizada',
+          classic: 'Holliday–Segar clássica'
+        };
+        const nextText = [
+          titles[prefix],
+          `Peso: ${formatNumber(values.weightKg, 3)} kg`,
+          `NHD: ${formatNumber(values.nhdPercent, 0)}%`,
+          `Volume em 24 h: ${formatNumber(values.dailyVolumeMl, 2)} mL`,
+          '',
+          buildPreparationPrescriptionText(values)
+        ].join('\n');
+        const changed = textarea.value !== nextText;
+        textarea.value = nextText;
+        textarea.hidden = false;
+        resizePrescriptionTextarea(textarea);
+        if (highlight && changed) {
+          textarea.classList.add('is-recalculated');
+          STATE.highlightTimers[prefix] = window.setTimeout(() => {
+            textarea.classList.remove('is-recalculated');
+            delete STATE.highlightTimers[prefix];
+          }, 1000);
+        }
       }
 
       function copyPrescriptionFallback(textarea) {
@@ -1023,16 +1113,16 @@
           button.dataset.copyBound = 'true';
 
           button.addEventListener('click', () => {
+            if (STATE.weightDirty || !STATE.lastCalculation || button.disabled) return;
             const copyText = textarea.value || '';
-            if (!copyText.trim()) {
-              showCopyStatus(prefix, false);
-              return;
-            }
+            if (!copyText.trim()) return;
+            const revision = STATE.revision;
+            const stillCurrent = () => revision === STATE.revision && !STATE.weightDirty && !!STATE.lastCalculation;
 
             if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
               navigator.clipboard.writeText(copyText)
-                .then(() => showCopyStatus(prefix, true))
-                .catch(() => showCopyStatus(prefix, copyPrescriptionFallback(textarea)));
+                .then(() => { if (stillCurrent()) showCopyStatus(prefix, true); })
+                .catch(() => { if (stillCurrent()) showCopyStatus(prefix, copyPrescriptionFallback(textarea)); });
               return;
             }
 
@@ -1041,11 +1131,11 @@
         });
       }
 
-      function setPreparationValues(prefix, values) {
-        setPreparationPrescription(prefix, values);
+      function setPreparationValues(prefix, values, highlight = false) {
+        setPreparationPrescription(prefix, values, highlight);
       }
 
-      function renderClassicHydration(result) {
+      function renderClassicHydration(result, highlight = false) {
         if (!result || !(result.weightKg > 0)) return;
         const classic = calculateClassicHydration(result.weightKg, result.nhdPercent);
         const selectedRateUnit = DOM.rateUnit ? DOM.rateUnit.value : 'mlh';
@@ -1053,6 +1143,9 @@
         const totalPerStage = classic.sg5MlPerStage + classic.nacl20MlPerStage + classic.kcl10MlPerStage;
 
         setPreparationValues('classic', {
+          weightKg: result.weightKg,
+          nhdPercent: result.nhdPercent,
+          dailyVolumeMl: classic.dailyVolumeMl,
           sg5Ml: classic.sg5MlPerStage,
           nacl20Ml: classic.nacl20MlPerStage,
           kcl10Ml: classic.kcl10MlPerStage,
@@ -1060,13 +1153,20 @@
           stages: classic.stages,
           rate: classicRate,
           componentDecimals: 1
-        });
+        }, highlight);
       }
 
-      function renderCalculation(result) {
+      function renderCalculation(result, highlight = false) {
+        clearResultHighlights();
         const { stagePreparation, rate } = result;
+        const context = {
+          weightKg: result.weightKg,
+          nhdPercent: result.nhdPercent,
+          dailyVolumeMl: result.dailyVolumeMl
+        };
 
         setPreparationValues('personal', {
+          ...context,
           sg5Ml: stagePreparation.sg5Ml,
           nacl20Ml: stagePreparation.nacl20Ml,
           kcl10Ml: stagePreparation.kcl10Ml,
@@ -1074,19 +1174,24 @@
           stages: stagePreparation.stages,
           rate,
           componentDecimals: 1
-        });
+        }, highlight);
 
         setPreparationValues('standard', {
+          ...context,
           sg5Ml: CONFIG.standardSolution.sg5Ml,
           nacl20Ml: CONFIG.standardSolution.nacl20Ml,
           kcl10Ml: CONFIG.standardSolution.kcl10Ml,
           totalMl: CONFIG.standardSolution.totalMl,
+          infusionVolumeMl: stagePreparation.stageVolumeMl,
           stages: stagePreparation.stages,
           rate,
           componentDecimals: 0
-        });
+        }, highlight);
 
-        renderClassicHydration(result);
+        renderClassicHydration(result, highlight);
+        const interval = formatStageInterval(stagePreparation.stages).padStart(2, '0');
+        DOM.personalSummary.textContent = `Peso: ${formatNumber(result.weightKg, 3)} kg · NHD: ${formatNumber(result.nhdPercent, 0)}% · Volume em 24 h: ${formatNumber(result.dailyVolumeMl, 2)} mL · Etapas/intervalo: ${stagePreparation.stages} (${interval}/${interval} horas)`;
+        DOM.personalSummary.hidden = false;
       }
 
       function resetOutputState() {
@@ -1094,9 +1199,8 @@
       }
 
       // event handlers
-      function runCalculation(forceClamp = false) {
+      function runCalculation(forceClamp = false, highlight = false) {
         clearError();
-        clearResults();
 
         const weightKg = applyWeightFieldRules(forceClamp);
         const nhdPercent = applyNhdPercentFieldRules();
@@ -1105,19 +1209,41 @@
         try {
           const result = calculateHydration(weightKg, rateUnit, nhdPercent);
           STATE.lastCalculation = result;
-          renderCalculation(result);
+          renderCalculation(result, highlight);
           showRateWarningIfNeeded(result);
+          refreshCopyButtons();
           return result;
         } catch (error) {
           STATE.lastCalculation = null;
           clearResults();
-          showError(error.message || 'Não foi possível calcular.');
+          const weightError = validateWeight(weightKg);
+          if (weightError) {
+            DOM.weightError.textContent = weightError;
+            DOM.weightError.hidden = false;
+            DOM.weight.setAttribute('aria-invalid', 'true');
+            const revision = STATE.revision;
+            window.setTimeout(() => {
+              if (revision !== STATE.revision || DOM.weight.getAttribute('aria-invalid') !== 'true') return;
+              DOM.weight.focus();
+              STATE.replaceWeightOnFirstEdit = true;
+              DOM.weight.select();
+            }, 0);
+          } else {
+            showError(error.message || 'Não foi possível calcular.');
+          }
           return null;
         }
       }
 
       function updateAutomatically() {
+        cancelResultNavigation();
+        STATE.revision += 1;
         clearError();
+
+        if (STATE.weightDirty) {
+          confirmWeight();
+          return;
+        }
 
         if (!DOM.weight.value.trim() || !DOM.nhdPercent.value.trim()) {
           STATE.lastCalculation = null;
@@ -1125,30 +1251,106 @@
           return;
         }
 
-        runCalculation();
+        runCalculation(false, true);
       }
 
-      function handleWeightInput() {
+      function cancelResultNavigation() {
+        if (STATE.navigationTimer !== null) {
+          window.clearTimeout(STATE.navigationTimer);
+          STATE.navigationTimer = null;
+        }
+      }
+
+      function showPersonalResult(moveFocus = true) {
+        cancelResultNavigation();
+        DOM.realPreparationCard.classList.remove('is-minimized');
+        DOM.realPreparationToggle.setAttribute('aria-expanded', 'true');
+        resizePrescriptionTextarea(DOM.personalPrescriptionText);
+        if (!moveFocus) return;
+        const revision = STATE.revision;
+        STATE.navigationTimer = window.setTimeout(() => {
+          STATE.navigationTimer = null;
+          if (revision !== STATE.revision || STATE.weightDirty || !STATE.lastCalculation) return;
+          DOM.personalCopyPrescription.focus({ preventScroll: true });
+          DOM.realPreparationCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 0);
+      }
+
+      function confirmWeight(moveToResult = false) {
+        const edited = STATE.weightDirty;
+        if (STATE.weightDirty) {
+          const weightKg = parseLocaleNumber(DOM.weight.value);
+          if (Number.isFinite(weightKg)) {
+            const formatted = formatNumber(weightKg, 3);
+            if (!validateWeight(weightKg) || validateWeight(parseLocaleNumber(formatted)) === validateWeight(weightKg)) {
+              DOM.weight.value = formatted;
+            }
+          }
+          STATE.weightDirty = false;
+          STATE.replaceWeightOnFirstEdit = false;
+          STATE.literalWeightInput = false;
+          runCalculation(false, true);
+        }
+        if ((edited || moveToResult) && STATE.lastCalculation) showPersonalResult(moveToResult);
+        return STATE.lastCalculation;
+      }
+
+      function handleWeightPaste(event) {
+        if (!event.clipboardData || typeof event.clipboardData.getData !== 'function') return;
+        const pasted = event.clipboardData.getData('text').trim();
+        event.preventDefault();
+        const start = STATE.replaceWeightOnFirstEdit ? 0 : DOM.weight.selectionStart;
+        const end = STATE.replaceWeightOnFirstEdit ? DOM.weight.value.length : DOM.weight.selectionEnd;
+        DOM.weight.value = DOM.weight.value.slice(0, start) + pasted + DOM.weight.value.slice(end);
+        DOM.weight.setSelectionRange(start + pasted.length, start + pasted.length);
+        STATE.literalWeightInput = true;
+        handleWeightInput({ inputType: 'insertFromPaste', data: null });
+      }
+
+      function handleWeightInput(event) {
+        if (/^insertFrom(?:Paste|Drop)$|^insertReplacementText$/.test(event.inputType || '')) {
+          STATE.literalWeightInput = true;
+        }
+        if (STATE.replaceWeightOnFirstEdit) {
+          if (/^insert/.test(event.inputType || '') && typeof event.data === 'string') DOM.weight.value = event.data;
+          else if (/^delete/.test(event.inputType || '')) DOM.weight.value = '';
+          STATE.replaceWeightOnFirstEdit = false;
+        }
+        cancelResultNavigation();
+        clearResultHighlights();
+        STATE.weightDirty = true;
+        STATE.revision += 1;
         clearError();
 
-        const sanitized = sanitizeWeightInput(DOM.weight.value);
+        const sanitized = STATE.literalWeightInput
+          ? (DOM.weight.value.includes(',') ? DOM.weight.value : DOM.weight.value.replace('.', ','))
+          : sanitizeWeightInput(DOM.weight.value);
         if (DOM.weight.value !== sanitized) {
           DOM.weight.value = sanitized;
+          DOM.weight.setSelectionRange(sanitized.length, sanitized.length);
         }
 
+        setResultsPending(true);
         if (!DOM.weight.value.trim()) {
           STATE.lastCalculation = null;
           resetOutputState();
-          return;
         }
+        refreshCopyButtons();
+      }
 
-        const weightKg = parseLocaleNumber(DOM.weight.value);
-        if (Number.isFinite(weightKg) && weightKg >= CONFIG.minimumWeightKg && weightKg <= CONFIG.maximumWeightKg) {
-          runCalculation(false);
-        } else {
-          STATE.lastCalculation = null;
-          resetOutputState();
-        }
+      function clearData() {
+        cancelResultNavigation();
+        STATE.revision += 1;
+        STATE.weightDirty = false;
+        STATE.replaceWeightOnFirstEdit = false;
+        STATE.literalWeightInput = false;
+        STATE.lastCalculation = null;
+        DOM.weight.value = '';
+        DOM.nhdPercent.value = '100';
+        DOM.rateUnit.value = 'mlh';
+        clearError();
+        clearResults();
+        DOM.weight.focus({ preventScroll: true });
       }
 
       function runSelfTests() {
@@ -1258,6 +1460,7 @@
         toggle.addEventListener('click', () => {
           const isMinimized = card.classList.toggle('is-minimized');
           toggle.setAttribute('aria-expanded', String(!isMinimized));
+          if (!isMinimized) resizePrescriptionTextareas();
         });
       }
 
@@ -1274,33 +1477,49 @@
       function bootstrap() {
         DOM.form.addEventListener('submit', (event) => {
           event.preventDefault();
-          runCalculation(true);
+          confirmWeight(true);
         });
 
+        DOM.weight.addEventListener('focus', () => {
+          cancelResultNavigation();
+          STATE.literalWeightInput = false;
+          STATE.replaceWeightOnFirstEdit = DOM.weight.value !== '';
+          if (STATE.replaceWeightOnFirstEdit) DOM.weight.select();
+        });
+        DOM.weight.addEventListener('beforeinput', (event) => {
+          if (STATE.replaceWeightOnFirstEdit && /^(insert|delete)/.test(event.inputType || '')) DOM.weight.select();
+        });
+        DOM.weight.addEventListener('paste', handleWeightPaste);
         DOM.weight.addEventListener('input', handleWeightInput);
-        DOM.weight.addEventListener('change', () => {
-          applyWeightFieldRules(true);
-          runCalculation(true);
-        });
+        DOM.weight.addEventListener('change', () => confirmWeight());
         DOM.weight.addEventListener('blur', () => {
-          applyWeightFieldRules(true);
-          runCalculation(true);
+          STATE.replaceWeightOnFirstEdit = false;
+          confirmWeight();
         });
+        DOM.weight.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' && !event.isComposing) {
+            event.preventDefault();
+            confirmWeight(true);
+          }
+        });
+        DOM.nhdPercent.addEventListener('focus', cancelResultNavigation);
+        DOM.rateUnit.addEventListener('focus', cancelResultNavigation);
         DOM.nhdPercent.addEventListener('change', () => {
           applyNhdPercentFieldRules();
           updateAutomatically();
         });
-        DOM.rateUnit.addEventListener('change', () => {
-          if (document.activeElement === DOM.weight || document.activeElement === DOM.nhdPercent) {
-            return;
-          }
-          updateAutomatically();
+        DOM.rateUnit.addEventListener('change', updateAutomatically);
+        DOM.form.addEventListener('reset', (event) => {
+          event.preventDefault();
+          clearData();
         });
 
         bindMinimizableCards();
         bindPreparationCopyButtons();
+        window.addEventListener('resize', resizePrescriptionTextareas);
 
         runCalculation(true);
+        DOM.weight.focus({ preventScroll: true });
       }
 
       window.HVisoCalculator = {
