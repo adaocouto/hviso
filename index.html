@@ -1,8 +1,8 @@
 <!-- NomeDoApp = "Hidratação Isotônica" -->
-<!-- AndroidVersionName = "1.012.10.16" -->
-<!-- VersionName = "1.012.10.16" -->
-<!-- VersionCode = "262891927" -->
-<!-- AndroidVersionCode = "262891927"; Timestamp = "2026-10-16T19:27:48-03:00" -->
+<!-- AndroidVersionName = "1.012.10.20" -->
+<!-- VersionName = "1.012.10.20" -->
+<!-- VersionCode = "262931531" -->
+<!-- AndroidVersionCode = "262931531"; Timestamp = "2026-10-20T15:31:00-03:00" -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1549,9 +1549,84 @@
     </div>
   </details>
 
-  <div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.012.10.16</span></div>
+  <div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.012.10.20</span></div>
 
   <div class="spacer-3lines" aria-hidden="true"></div>
+
+
+  <!-- Retenção local mínima: somente os campos editáveis e a disposição dos cartões; não altera cálculos. -->
+  <script>
+    (() => {
+      'use strict';
+      const storageKey = 'hviso_last_inputs_v1';
+      const weight = document.getElementById('peso');
+      const nhd = document.getElementById('nhdPercent');
+      const rate = document.getElementById('unidadeTaxa');
+      const form = document.getElementById('formHViso');
+      const cards = Array.from(document.querySelectorAll('[data-minimizable-card]'));
+      const units = new Set(['mlh', 'gtt', 'microgtt']);
+      let restoring = false;
+      let scrolling = false;
+      const save = () => {
+        if (restoring) return;
+        const state = {
+          schema: 1,
+          peso: weight.value,
+          nhdPercent: nhd.value,
+          unidadeTaxa: rate.value,
+          cards: Object.fromEntries(cards.map(card => [card.id, !card.classList.contains('is-minimized')])),
+          scrollY: Math.max(0, window.scrollY || 0)
+        };
+        try { localStorage.setItem(storageKey, JSON.stringify(state)); }
+        catch (_) { /* A calculadora permanece disponível sem armazenamento. */ }
+      };
+      const restore = () => {
+        let saved;
+        try { saved = JSON.parse(localStorage.getItem(storageKey) || 'null'); }
+        catch (_) { return; }
+        if (!saved || saved.schema !== 1 || typeof saved !== 'object') return;
+        restoring = true;
+        try {
+          if (typeof saved.peso === 'string' && saved.peso.length <= 16) {
+            const value = window.HVisoCalculator?.parseLocaleNumber(saved.peso);
+            if (saved.peso === '' || (Number.isFinite(value) && value >= 3 && value <= 95)) {
+              weight.value = saved.peso;
+            }
+          }
+          if (typeof saved.nhdPercent === 'string' &&
+              Array.from(nhd.options).some(option => option.value === saved.nhdPercent)) {
+            nhd.value = saved.nhdPercent;
+          }
+          if (units.has(saved.unidadeTaxa)) rate.value = saved.unidadeTaxa;
+          if (saved.cards && typeof saved.cards === 'object') {
+            cards.forEach(card => {
+              if (typeof saved.cards[card.id] !== 'boolean') return;
+              card.classList.toggle('is-minimized', !saved.cards[card.id]);
+              const toggle = card.querySelector('[data-minimizable-toggle]');
+              if (toggle) toggle.setAttribute('aria-expanded', String(saved.cards[card.id]));
+            });
+          }
+          // Usa exclusivamente os handlers originais, que recalculam as três prescrições.
+          nhd.dispatchEvent(new Event('change', { bubbles: true }));
+          window.dispatchEvent(new Event('resize'));
+          if (Number.isFinite(saved.scrollY) && saved.scrollY >= 0) {
+            requestAnimationFrame(() => window.scrollTo(0, saved.scrollY));
+          }
+        } finally { restoring = false; }
+      };
+      form.addEventListener('input', save);
+      form.addEventListener('change', save);
+      form.addEventListener('reset', () => window.setTimeout(save, 0));
+      cards.forEach(card => card.querySelector('[data-minimizable-toggle]')?.addEventListener('click', save));
+      window.addEventListener('pagehide', save);
+      window.addEventListener('scroll', () => {
+        if (scrolling) return;
+        scrolling = true;
+        window.setTimeout(() => { scrolling = false; save(); }, 250);
+      }, { passive: true });
+      restore();
+    })();
+  </script>
 
 </body>
 </html>
