@@ -1,8 +1,8 @@
 <!-- NomeDoApp = "Hidratação Isotônica" -->
-<!-- AndroidVersionName = "1.014.11.01" -->
-<!-- VersionName = "1.014.11.01" -->
-<!-- VersionCode = "262931532" -->
-<!-- AndroidVersionCode = "262931532"; Timestamp = "2026-10-20T15:31:00-03:00" -->
+<!-- AndroidVersionName = "1.15.11.07" -->
+<!-- VersionName = "1.15.11.07" -->
+<!-- VersionCode = "263112322" -->
+<!-- AndroidVersionCode = "263112322"; Timestamp = "2026-11-07T23:22:45-03:00" -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -33,11 +33,12 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.45;
       background: #e8f0fe;
       color: var(--texto);
       min-height: 100vh;
-      padding: 24px 16px 48px;
+      padding: 24px 16px 42px;
     }
 
     header {
@@ -67,9 +68,9 @@
     .secao {
       background: var(--branco);
       border: 1.5px solid var(--borda);
-      border-radius: 12px;
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
     }
     .secao-header {
       background: var(--azul);
@@ -96,18 +97,18 @@
 
     .campo { display: flex; flex-direction: column; gap: 4px; }
     .campo label {
-      font-size: 0.75rem;
-      font-weight: 600;
+      font-size: 0.78rem;
+      font-weight: 700;
       color: #475569;
       letter-spacing: 0.3px;
     }
     .campo input, .campo select {
       min-height: 44px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.96rem;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 1rem;
       padding: 9px 10px;
       border: 1.5px solid var(--borda);
-      border-radius: 7px;
+      border-radius: 9px;
       background: var(--cinza);
       color: var(--texto);
       width: 100%;
@@ -119,7 +120,7 @@
       background: #fff;
     }
     .campo input[readonly] {
-      background: var(--azul-clr);
+      background: #f4f8fd;
       color: var(--azul);
       font-weight: 600;
       border-color: #93c5fd;
@@ -136,11 +137,13 @@
       border-color: #fde047;
     }
     .campo .unidade {
-      font-size: 0.7rem;
+      font-size: 0.86rem;
       color: #475569;
       margin-top: 1px;
     }
-    .campo input[aria-invalid="true"] { border-color: var(--vermelho); }
+    .campo input[aria-invalid="true"] { background:#fff8f8; border-color:#fca5a5; box-shadow:0 0 0 4px rgba(153,27,27,.08); }
+    .campo input:focus, .campo select:focus { border-color:#2563a8; box-shadow:0 0 0 2px #dbeafe; }
+    .campo input:focus-visible, .campo select:focus-visible { outline:3px solid #2563a8; outline-offset:2px; }
     .field-error { color: var(--vermelho); font-size: 0.8rem; line-height: 1.4; }
     .calculation-summary { color: #475569; font-size: 0.82rem; line-height: 1.45; margin-bottom: 10px; }
 
@@ -420,7 +423,7 @@
     /* Saída compacta: preparo por etapa sem duplicar campos somente leitura */
     .preparo-hv-card {
       border: 1px solid #bfdbfe;
-      background: linear-gradient(180deg,#fffdfa 0%,#fff8dd 100%);
+      background: #ffffff;
       border-radius: 12px;
       padding: 14px;
     }
@@ -470,8 +473,8 @@
       font-size: 0.9rem;
     }
     @media (max-width: 640px) {
-      body { padding-left: 12px; padding-right: 12px; }
-      .wrapper { gap: 14px; }
+      body { padding-left: 16px; padding-right: 16px; }
+      .wrapper { gap: 20px; }
       .secao-body { padding: 14px; }
       .preparo-hv-card { padding: 12px; }
       .preparo-hv-row { padding: 8px 0; }
@@ -491,6 +494,11 @@
     .btn-back-to-top svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
     .btn-row .btn-back-to-top{margin-left:auto}
     .btn-back-to-top svg path{fill:none;stroke:currentColor}
+    /* Padrão visual dos três botões da Entrada conforme referência Glasgow. */
+    .btn-row:has(#calcularDados){display:flex;flex-wrap:nowrap;align-items:stretch;gap:8px}
+    .btn-row:has(#calcularDados) #calcularDados{flex:1 1 auto;min-width:0;background:#1e3d6b;color:#fff;font-size:0.85rem;border-radius:12px}
+    .btn-row:has(#calcularDados) #limparDados{flex:0 1 auto;min-width:0;padding-inline:clamp(10px,3vw,22px);background:#f1f5f9;color:#334155;font-size:0.85rem;border-radius:12px}
+    .btn-row:has(#calcularDados) .btn-back-to-top{flex:0 0 48px;margin-left:0;border-radius:12px}
     /* Setas junto aos botões de cópia: manter o botão principal flexível. */
     .prontuario-actions .btn-back-to-top{width:48px;min-width:48px;min-height:48px;padding:0;justify-self:end}
     .result-return-row{max-width:820px;margin:12px auto 0;display:flex;justify-content:flex-end}
@@ -504,7 +512,7 @@
     .hero h1{display:flex;flex-wrap:nowrap;justify-content:center;align-items:center;gap:8px;margin:0;color:#1a3a6b;font-size:clamp(1.35rem,3.5vw,2.05rem);font-weight:700;letter-spacing:-.5px;line-height:1.15;text-align:center}
     .hero .hero-icon{flex:0 0 auto;font-size:1em;line-height:1}
     .hero #appHeadingText{min-width:0;overflow-wrap:normal}
-    .hero p{margin:4px 0 0;color:#61778f;font-size:.92rem;line-height:1.55;text-align:center}
+    .hero p{margin:12px 0 0;color:#61778f;font-size:.92rem;line-height:1.55;text-align:center}
     .header-controls{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:12px auto 16px}
     .header-controls button{min-height:44px;white-space:nowrap;flex-shrink:0}
     .language-control{display:flex;align-items:center;gap:6px;min-width:0}
@@ -521,7 +529,79 @@
     .footer-version-row{justify-content:center}
     @media(max-width:640px){.hero h1{flex-wrap:nowrap;font-size:clamp(1.3rem,5.5vw,1.6rem)}}
     @media(max-width:370px){.header-controls{gap:7px}.header-controls button{font-size:.86rem;padding:9px}.language-control{gap:4px}.language-control label{font-size:.84rem}/* largura e fonte do seletor preservadas conforme padrão */}
-  </style>
+  
+
+/* Padronização restrita ao cabeçalho e às barras de informações legais. */
+.header-controls, .standard-top-actions.header-controls, .planoc-top-actions, .paraped-top-actions, .acoes-superior {
+  display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px;
+}
+.header-controls button, .standard-top-actions button, .planoc-top-actions button, .paraped-top-actions button, .acoes-superior button { min-height:44px; white-space:nowrap; }
+#btnSair { min-width:78px; }
+/* O controle de idioma permanece oculto para compatibilidade com scripts legados. */
+.language-group, .language-control, .hvneo-language-control {display:none!important;}
+.legal-disclaimer + .legal-disclaimer {margin-top:6px!important;}
+.legal-disclaimer.legal-policy-row {
+  box-sizing:border-box;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; padding:11px 13px; margin-top:6px!important;
+  margin-bottom:0!important;
+  border:1px solid #e2e8f0; border-radius:14px;
+  background:#f8fafc; box-shadow:none;
+  color:#5c6f87; font-size:.78rem; font-weight:700;
+  line-height:1.45; text-decoration:none;
+}
+.legal-disclaimer.legal-policy-row svg {
+  width:16px; height:16px; flex:0 0 16px;
+  fill:none; stroke:#7b8da0; stroke-width:2;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+.legal-disclaimer.legal-policy-row:focus-visible {outline:3px solid #2563a8;outline-offset:2px;}
+body {padding-bottom:42px;}
+.spacer-3lines {height:0!important;display:none!important;}
+.footer-version-row, .versao-rodape, .planoc-footer-row, .paraped-footer-row, .hvneo-footer-row, .hidra-footer {margin-top:20px!important;margin-bottom:0!important;}
+.signature-block strong {font-size:clamp(12px,3.5vw,14px);}
+@media(min-width:345px){.signature-block strong{white-space:nowrap;}}
+
+header{margin-bottom:14px!important}.header-controls{margin-top:0!important;margin-bottom:20px!important}
+
+/* Padrao Apgar: botoes do cabecalho em duas colunas iguais; barras legais compactas. */
+.header-controls {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  gap: 10px;
+  align-items: stretch;
+  justify-content: stretch;
+}
+.header-controls > button {
+  box-sizing: border-box;
+  flex: none;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0 !important;
+  min-height: 44px;
+  padding: 9px 10px;
+  font-family: inherit;
+  font-size: .95rem;
+  font-weight: 700;
+  white-space: nowrap;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  background: #eef3f8;
+  color: #264764;
+}
+.header-controls > button:hover { background: #dbeafe; }
+.header-controls > select[hidden], .header-controls > .language-control,
+.header-controls > .hvneo-language-control { display: none !important; }
+@media (max-width: 350px) {
+  .header-controls > button { font-size: .86rem; padding: 9px 6px; }
+}
+#hvisoReferences { margin-top: 20px !important; }
+
+#hvisoReferences { margin-right: auto !important; margin-left: auto !important; }
+  /* Ocultar somente o resumo duplicado acima da prescrição personalizada. */
+  #personalCalculationSummary { display: none !important; }
+</style>
 </head>
 <body>
   <header class="hero" id="sectionHero">
@@ -530,9 +610,8 @@
   </header>
   <div class="header-controls">
     <button type="button" class="btn btn-reset" id="clearTopButton">Limpar dados</button>
-    <div class="language-control"><label for="idioma">Idioma</label>
-      <select id="idioma" aria-label="Idioma / Language"><option value="pt-BR">Português</option><option value="en-US">English</option></select>
-    </div>
+      <button class="btn btn-reset" id="btnSair" type="button">Sair</button>
+    <select id="idioma" hidden aria-hidden="true" tabindex="-1" style="display:none!important"><option value="pt-BR" selected>Português</option><option value="en-US">English</option></select>
   </div>
 
   <div id="restoredDataNotice" class="restored-data-notice" role="status" hidden>
@@ -547,18 +626,17 @@
           <div class="grid-2">
             <div class="campo">
               <label for="peso">Peso</label>
-              <input type="text" id="peso" name="peso" inputmode="decimal" enterkeyhint="done" placeholder="Ex.: 12 ou 12,300" value="4,800" maxlength="6" aria-describedby="pesoHint pesoError" aria-invalid="false">
-              <span class="unidade" id="pesoHint">kg (mínimo 3,000 e máximo 95) · cálculo ao sair do campo</span>
+              <input type="text" id="peso" name="peso" inputmode="decimal" enterkeyhint="done" placeholder="Ex.: 12 ou 12,300" value="" maxlength="6" aria-describedby="pesoError" aria-invalid="false">
               <div class="field-error" id="pesoError" role="alert" hidden></div>
             </div>
             <div class="campo">
               <label for="unidadeTaxa">Unidade da velocidade de infusão</label>
               <select id="unidadeTaxa" name="unidadeTaxa">
-                <option value="mlh" selected>mL/h</option>
+                <option value="" selected>Selecionar</option>
+                <option value="mlh">mL/h</option>
                 <option value="gtt">gotas/min (20 gotas/mL)</option>
                 <option value="microgtt">microgotas/min (60 microgotas/mL)</option>
               </select>
-              <span class="unidade">A taxa é calculada a partir do volume diário ÷ 24</span>
             </div>
           </div>
 
@@ -566,6 +644,7 @@
             <div class="campo">
               <label for="nhdPercent">NHD utilizada</label>
               <select id="nhdPercent" name="nhdPercent">
+                <option value="">Selecione</option>
                 <option value="10">10%</option>
                 <option value="20">20%</option>
                 <option value="30">30%</option>
@@ -575,7 +654,7 @@
                 <option value="70">70%</option>
                 <option value="80">80%</option>
                 <option value="90">90%</option>
-                <option value="100" selected>100%</option>
+                <option value="100">100%</option>
                 <option value="110">110%</option>
                 <option value="120">120%</option>
                 <option value="130">130%</option>
@@ -583,10 +662,23 @@
                 <option value="150">150%</option>
                 <option value="160">160%</option>
               </select>
-              <span class="unidade">Necessidades Hídricas Diárias — S.G.5% + NaCl 20% + KCl 10% — de 10 em 10%</span>
+            </div>
+            <div class="campo">
+              <label for="intervaloEtapas">Intervalo entre etapas</label>
+              <select id="intervaloEtapas" name="intervaloEtapas">
+                <option value="">Selecionar</option>
+                <option value="1">24/24 horas</option>
+                <option value="2">12/12 horas</option>
+                <option value="3">8/8 horas</option>
+                <option value="4">6/6 horas</option>
+                <option value="6">4/4 horas</option>
+                <option value="8">3/3 horas</option>
+                <option value="12">2/2 horas</option>
+              </select>
             </div>
           </div>
           <div class="btn-row">
+            <button type="button" class="btn btn-primary" id="calcularDados">Calcular</button>
             <button type="reset" class="btn btn-reset" id="limparDados">Limpar</button>
             <button type="button" class="btn-back-to-top" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
           </div>
@@ -594,14 +686,14 @@
         </div>
       </div>
 
-      <div class="secao card-minimizable is-minimized" id="standardPreparationCard" data-minimizable-card>
-        <button type="button" class="secao-header card-minimizable-header" id="standardPreparationToggle" data-minimizable-toggle aria-expanded="false" aria-controls="standardPreparationBody">
+      <div class="secao card-minimizable" id="standardPreparationCard" data-minimizable-card>
+        <button type="button" class="secao-header card-minimizable-header" id="standardPreparationToggle" data-minimizable-toggle aria-expanded="true" aria-controls="standardPreparationBody">
           <span>Solução Isotônica Padrão</span>
           <span class="card-minimizable-arrow" aria-hidden="true">▸</span>
         </button>
         <div class="secao-body card-minimizable-body" id="standardPreparationBody">
           <div class="preparo-hv-card" aria-live="polite">
-            <h3>Preparo da hidratação — por etapa</h3>
+            <h3>Preparo da hidrataçãopor Etapa</h3>
             <div class="prontuario-content">
               <textarea id="standardPrescriptionText" rows="7" class="prontuario-textarea" readonly aria-label="Prescrição da solução isotônica padrão"></textarea>
               <div class="prontuario-actions">
@@ -622,7 +714,7 @@
         </button>
         <div class="secao-body card-minimizable-body" id="realPreparationBody">
           <div class="preparo-hv-card" aria-live="polite">
-            <h3>Preparo da hidratação — por etapa</h3>
+            <h3>Preparo da hidrataçãopor Etapa</h3>
             <p id="personalCalculationSummary" class="calculation-summary" hidden></p>
             <div class="prontuario-content">
               <textarea id="personalPrescriptionText" rows="7" class="prontuario-textarea" readonly aria-label="Prescrição da solução isotônica personalizada"></textarea>
@@ -643,7 +735,7 @@
         </button>
         <div class="secao-body card-minimizable-body" id="classicHydrationBody">
           <div class="preparo-hv-card" aria-live="polite">
-            <h3>Preparo da hidratação — por etapa</h3>
+            <h3>Preparo da hidrataçãopor Etapa</h3>
             <div class="prontuario-content">
               <textarea id="classicPrescriptionText" rows="7" class="prontuario-textarea" readonly aria-label="Prescrição da hidratação Holliday-Segar clássica"></textarea>
               <div class="prontuario-actions">
@@ -677,7 +769,7 @@
       const storageKey = 'hviso.language.v1';
       const select = document.getElementById('idioma');
       let language = 'pt-BR';
-      try { if (localStorage.getItem(storageKey) === 'en-US') language = 'en-US'; } catch (_) {}
+      /* Sem seletor: o idioma exibido é português. */
       const ptEn = new Map(Object.entries({
         '💧 Hidratação Venosa Isotônica':'💧 Isotonic Intravenous Hydration',
         'Preparo por etapas de':'Stage-by-stage preparation of',
@@ -687,9 +779,7 @@
         'Unidade da velocidade de infusão':'Infusion rate unit',
         'gotas/min (20 gotas/mL)':'drops/min (20 drops/mL)',
         'microgotas/min (60 microgotas/mL)':'microdrops/min (60 microdrops/mL)',
-        'A taxa é calculada a partir do volume diário ÷ 24':'The rate is calculated as daily volume ÷ 24',
         'NHD utilizada':'Maintenance fluid requirement used',
-        'Necessidades Hídricas Diárias — S.G.5% + NaCl 20% + KCl 10% — de 10 em 10%':'Daily maintenance fluid requirements — D5W + 20% NaCl + 10% KCl — in 10% increments',
         'Limpar':'Clear',
         'Limpar dados':'Clear data',
         'Idioma':'Language',
@@ -698,7 +788,7 @@
         'Solução Isotônica Padrão':'Standard Isotonic Solution',
         'Solução Isotônica Personalizada':'Personalized Isotonic Solution',
         'Holliday–Segar Clássica':'Classic Holliday–Segar',
-        'Preparo da hidratação — por etapa':'Fluid preparation — per stage',
+        'Preparo da hidrataçãopor Etapa':'Fluid preparation — per stage',
         'Copiar Prescrição':'Copy prescription',
         'Prescrição da solução isotônica padrão':'Standard isotonic solution prescription',
         'Prescrição da solução isotônica personalizada':'Personalized isotonic solution prescription',
@@ -714,7 +804,7 @@
         'Informe uma porcentagem válida para a NHD.':'Enter a valid percentage for maintenance fluids.',
         'Não foi possível calcular.':'Unable to calculate.',
         'Taxa muito baixa para equipo macro. Preferir bomba de infusão em mL/h ou microgotas.':'Rate too low for a macrodrip set. Prefer an infusion pump in mL/h or a microdrip set.',
-        'kg (mínimo 3,000 e máximo 95) · cálculo ao sair do campo':'kg (minimum 3.000, maximum 95) · calculates when leaving the field',
+        'kg':'kg (minimum 3.000, maximum 95) · calculates when leaving the field',
         'Desenvolvido por Adão L. L. Couto':'Developed by Adão L. L. Couto',
         'Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.':'This software and all information it contains are provided solely for educational purposes and as a medical reference aid. THIS SYSTEM DOES NOT REPLACE INDIVIDUAL CLINICAL JUDGMENT, MEDICAL HISTORY OR PHYSICAL EXAMINATION. This information must not be used alone for diagnosis, patient management or treatment. Final responsibility for any clinical decision, prescription or intervention rests exclusively with the licensed treating healthcare professional. The developers do not guarantee the absolute accuracy of all data and disclaim liability for direct or indirect harm arising from improper use, misinterpretation or exclusive reliance on this system. Patients and lay users should consult a qualified physician before making health decisions.'
       }));
@@ -759,6 +849,7 @@
         }).join('\n');
       }
       function translateDom() {
+        if (window.HVisoAndroidI18n?.active) return;
         document.documentElement.lang = language;
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
         const nodes=[];
@@ -853,6 +944,7 @@
         weightError: document.getElementById('pesoError'),
         nhdPercent: document.getElementById('nhdPercent'),
         rateUnit: document.getElementById('unidadeTaxa'),
+        stageInterval: document.getElementById('intervaloEtapas'),
         alertBox: document.getElementById('alerta'),
         realPreparationCard: document.getElementById('realPreparationCard'),
         realPreparationToggle: document.getElementById('realPreparationToggle'),
@@ -915,29 +1007,33 @@
         });
       }
 
+      // Android string resources; standalone pt-BR fallback retained in the embedded catalogue.
+      const T = (key, values = []) => window.HVisoAndroidI18n
+        ? window.HVisoAndroidI18n.t(key, values) : '';
+
       // validators
       function validateWeight(weightKg) {
         if (!Number.isFinite(weightKg)) {
-          return 'Informe um peso válido.';
+          return T('error_weight_invalid');
         }
         if (weightKg < CONFIG.minimumWeightKg) {
-          return `O valor mínimo para peso é ${formatNumber(CONFIG.minimumWeightKg, 3)} kg.`;
+          return T('error_weight_min', [formatNumber(CONFIG.minimumWeightKg, 3)]);
         }
         if (weightKg > CONFIG.maximumWeightKg) {
-          return `O valor máximo para peso é ${formatNumber(CONFIG.maximumWeightKg, 0)} kg.`;
+          return T('error_weight_max', [formatNumber(CONFIG.maximumWeightKg, 0)]);
         }
         return null;
       }
 
       function validateNhdPercent(nhdPercent) {
         if (!Number.isFinite(nhdPercent)) {
-          return 'Informe uma porcentagem válida para a NHD.';
+          return T('error_nhd_invalid');
         }
         if (nhdPercent < CONFIG.minimumNhdPercent) {
-          return `A porcentagem da NHD não pode ser menor que ${formatNumber(CONFIG.minimumNhdPercent, 0)}%.`;
+          return T('error_nhd_min', [formatNumber(CONFIG.minimumNhdPercent, 0)]);
         }
         if (nhdPercent > CONFIG.maximumNhdPercent) {
-          return `A porcentagem da NHD não pode ser maior que ${formatNumber(CONFIG.maximumNhdPercent, 0)}%.`;
+          return T('error_nhd_max', [formatNumber(CONFIG.maximumNhdPercent, 0)]);
         }
         return null;
       }
@@ -1053,14 +1149,14 @@
           const rawDropsPerMinute = (mlPerHour * 20) / 60;
           const dropsPerMinute = Math.round(rawDropsPerMinute);
           const lowMacroDripWarning = rawDropsPerMinute > 0 && rawDropsPerMinute < 1
-            ? 'Taxa muito baixa para equipo macro. Preferir bomba de infusão em mL/h ou microgotas.'
+            ? T('warning_macro_low')
             : '';
 
           return {
             unit,
-            label: 'Gotas/minuto',
-            valueText: `${dropsPerMinute.toLocaleString('pt-BR')} gotas/min`,
-            info: 'conversão usando equipo macro de 20 gotas/mL',
+            label: T('rate_label_drops'),
+            valueText: T('rate_value_drops', [dropsPerMinute.toLocaleString('pt-BR')]),
+            info: T('rate_info_drops'),
             numericValue: dropsPerMinute,
             rawNumericValue: rawDropsPerMinute,
             warning: lowMacroDripWarning
@@ -1071,9 +1167,9 @@
           const microdropsPerMinute = Math.round(mlPerHour);
           return {
             unit,
-            label: 'Microgotas/minuto',
-            valueText: `${microdropsPerMinute.toLocaleString('pt-BR')} microgotas/min`,
-            info: 'conversão usando equipo micro de 60 microgotas/mL',
+            label: T('rate_label_micro'),
+            valueText: T('rate_value_micro', [microdropsPerMinute.toLocaleString('pt-BR')]),
+            info: T('rate_info_micro'),
             numericValue: microdropsPerMinute,
             warning: ''
           };
@@ -1081,9 +1177,9 @@
 
         return {
           unit: 'mlh',
-          label: 'mL/hora',
-          valueText: `${formatNumber(mlPerHour, 1)} mL/h`,
-          info: 'taxa contínua das 24 horas',
+          label: T('rate_label_hour'),
+          valueText: T('rate_value_hour', [formatNumber(mlPerHour, 1)]),
+          info: T('rate_info_hour'),
           numericValue: mlPerHour,
           warning: ''
         };
@@ -1106,8 +1202,17 @@
         );
       }
 
+      function permittedStageCount(minimumStages) {
+        const requested = Number(DOM.stageInterval.value);
+        const stages = CONFIG.allowedStageCountsPerDay.includes(requested)
+          ? Math.max(requested, minimumStages)
+          : minimumStages;
+        if (DOM.stageInterval.value !== String(stages)) DOM.stageInterval.value = String(stages);
+        return stages;
+      }
+
       function buildStagePreparation(volumePerDayMl) {
-        const stages = resolveStageCount(volumePerDayMl);
+        const stages = permittedStageCount(resolveStageCount(volumePerDayMl));
         const stageVolumeMl = volumePerDayMl / stages;
         const components = calculateStageComponents(stageVolumeMl);
 
@@ -1150,8 +1255,9 @@
         // Desvincula as etapas clássicas da referência global de 530 mL da solução isotônica.
         // Calcula as etapas dinamicamente garantindo que o S.G. 5% nunca exceda a capacidade física de 500 mL.
         const minimumStagesNeeded = Math.max(1, Math.ceil(sg5MlPerDay / 500));
-        const stages = CONFIG.allowedStageCountsPerDay.find((c) => c >= minimumStagesNeeded) ||
+        const minimumClassicStages = CONFIG.allowedStageCountsPerDay.find((c) => c >= minimumStagesNeeded) ||
                        CONFIG.allowedStageCountsPerDay[CONFIG.allowedStageCountsPerDay.length - 1];
+        const stages = permittedStageCount(minimumClassicStages);
 
         return {
           dailyVolumeMl,
@@ -1165,14 +1271,30 @@
         };
       }
 
+      let intervalManuallySelected = false;
+      let lastIntervalWeight = null;
+      let lastIntervalNhd = null;
       function calculateHydration(weightKg, rateUnit, nhdPercent = 100) {
         const validationError = validateWeight(weightKg) || validateNhdPercent(nhdPercent);
         if (validationError) {
           throw new Error(validationError);
         }
 
+        // A escolha manual vale até a próxima alteração de peso ou NHD.
+        const inputsChanged = lastIntervalWeight !== null &&
+          (lastIntervalWeight !== weightKg || lastIntervalNhd !== nhdPercent);
+        if (inputsChanged) intervalManuallySelected = false;
+        if (!intervalManuallySelected) DOM.stageInterval.value = '';
+        lastIntervalWeight = weightKg;
+        lastIntervalNhd = nhdPercent;
+
         const baseDailyVolumeMl = calculateDailyMaintenanceVolume(weightKg);
         const dailyVolumeMl = baseDailyVolumeMl * (nhdPercent / 100);
+        const classicMinimum = calculateClassicHydration(weightKg, nhdPercent);
+        const minimumStages = Math.max(resolveStageCount(dailyVolumeMl), classicMinimum.stages);
+        const selected = Number(DOM.stageInterval.value);
+        DOM.stageInterval.value = String(CONFIG.allowedStageCountsPerDay.includes(selected)
+          ? Math.max(selected, minimumStages) : minimumStages);
         const stagePreparation = buildStagePreparation(dailyVolumeMl);
         const rate = calculateRate(dailyVolumeMl, rateUnit);
 
@@ -1269,27 +1391,27 @@
 
       function formatPrescriptionRate(rate) {
         if (!rate) return '—';
-        if (rate.unit === 'mlh') return `${formatNumber(rate.numericValue, 1)} mL/hora`;
-        if (rate.unit === 'gtt') return `${Math.round(rate.numericValue).toLocaleString('pt-BR')} gotas/minuto`;
-        if (rate.unit === 'microgtt') return `${Math.round(rate.numericValue).toLocaleString('pt-BR')} microgotas/minuto`;
+        if (rate.unit === 'mlh') return T('rx_rate_hour', [formatNumber(rate.numericValue, 1)]);
+        if (rate.unit === 'gtt') return T('rx_rate_drops', [Math.round(rate.numericValue).toLocaleString('pt-BR')]);
+        if (rate.unit === 'microgtt') return T('rx_rate_micro', [Math.round(rate.numericValue).toLocaleString('pt-BR')]);
         return rate.valueText || '—';
       }
 
-      function buildPreparationPrescriptionText(values) {
+      function buildPreparationPrescriptionText(values, prefix) {
         const interval = formatStageInterval(values.stages);
         const volumeLines = Number.isFinite(values.infusionVolumeMl)
           ? [
-              `Volume preparado = ${formatNumber(values.totalMl, 2)} mL`,
-              `Volume a infundir nesta etapa = ${formatNumber(values.infusionVolumeMl, 2)} mL`
+              T('rx_prepared_volume', [formatNumber(values.totalMl, 2)]),
+              T('rx_infused_volume', [formatNumber(values.infusionVolumeMl, 2)])
             ]
-          : [`Volume Total = ${formatNumber(values.totalMl, 2)} mL`];
+          : [T('rx_total_volume', [formatNumber(values.totalMl, 2)])];
         return [
-          `S.G. 5% - ${formatNumber(values.sg5Ml, 1)} mL`,
-          `NaCl 20% - ${formatNumber(values.nacl20Ml, 1)} mL`,
-          `KCl 10% - ${formatNumber(values.kcl10Ml, 1)} mL`,
+          T('rx_sg5', [formatNumber(values.sg5Ml, prefix === 'personal' || prefix === 'classic' ? 0 : 1)]),
+          T('rx_nacl20', [formatNumber(values.nacl20Ml, 1)]),
+          T('rx_kcl10', [formatNumber(values.kcl10Ml, 1)]),
           '',
           ...volumeLines,
-          `Infundir a ${formatPrescriptionRate(values.rate)} de ${interval}/${interval} horas`
+          T('rx_infusion_instruction', [formatPrescriptionRate(values.rate), interval, interval])
         ].join('\n');
       }
 
@@ -1297,17 +1419,17 @@
         const textarea = DOM[`${prefix}PrescriptionText`];
         if (!textarea) return;
         const titles = {
-          standard: 'Solução isotônica padrão',
-          personal: 'Solução isotônica personalizada',
-          classic: 'Holliday–Segar clássica'
+          standard: T('rx_title_standard'),
+          personal: T('rx_title_personal'),
+          classic: T('rx_title_classic')
         };
         const nextText = [
           titles[prefix],
-          `Peso: ${formatNumber(values.weightKg, 3)} kg`,
-          `NHD: ${formatNumber(values.nhdPercent, 0)}%`,
-          `Volume em 24 h: ${formatNumber(values.dailyVolumeMl, 2)} mL`,
+          T('rx_weight', [formatNumber(values.weightKg, 3)]),
+          T('rx_nhd', [formatNumber(values.nhdPercent, 0)]),
+          T('rx_daily_volume', [formatNumber(values.dailyVolumeMl, 2)]),
           '',
-          buildPreparationPrescriptionText(values)
+          buildPreparationPrescriptionText(values, prefix)
         ].join('\n');
         const changed = textarea.dataset.sourcePt !== nextText;
         textarea.dataset.sourcePt = nextText;
@@ -1334,7 +1456,7 @@
       function showCopyStatus(prefix, copied) {
         const status = DOM[`${prefix}CopyStatus`];
         if (!status) return;
-        status.textContent = copied ? '✓ Copiado' : 'Selecione o texto e copie manualmente.';
+        status.textContent = copied ? T('copy_success') : T('copy_manual');
         status.classList.add('show');
         window.setTimeout(() => {
           status.classList.remove('show');
@@ -1372,25 +1494,38 @@
         setPreparationPrescription(prefix, values, highlight);
       }
 
+      // Valores da montagem exibida: o arredondamento do S.G. altera o
+      // volume preparado e a velocidade, sem alterar o alvo hídrico calculado.
+      function assembledPreparation(values, rateUnit) {
+        const sg5Ml = Math.round(values.sg5Ml);
+        const nacl20Ml = Number(values.nacl20Ml.toFixed(1));
+        const kcl10Ml = Number(values.kcl10Ml.toFixed(1));
+        const totalMl = sg5Ml + nacl20Ml + kcl10Ml;
+        const dailyAssembledMl = totalMl * values.stages;
+        return {
+          ...values,
+          sg5Ml,
+          nacl20Ml,
+          kcl10Ml,
+          totalMl,
+          rate: calculateRate(dailyAssembledMl, rateUnit)
+        };
+      }
+
       function renderClassicHydration(result, highlight = false) {
         if (!result || !(result.weightKg > 0)) return;
         const classic = calculateClassicHydration(result.weightKg, result.nhdPercent);
         const selectedRateUnit = DOM.rateUnit ? DOM.rateUnit.value : 'mlh';
-        const classicRate = calculateRate(classic.dailyVolumeMl, selectedRateUnit);
-        const totalPerStage = classic.sg5MlPerStage + classic.nacl20MlPerStage + classic.kcl10MlPerStage;
-
-        setPreparationValues('classic', {
+        setPreparationValues('classic', assembledPreparation({
           weightKg: result.weightKg,
           nhdPercent: result.nhdPercent,
           dailyVolumeMl: classic.dailyVolumeMl,
           sg5Ml: classic.sg5MlPerStage,
           nacl20Ml: classic.nacl20MlPerStage,
           kcl10Ml: classic.kcl10MlPerStage,
-          totalMl: totalPerStage,
           stages: classic.stages,
-          rate: classicRate,
           componentDecimals: 1
-        }, highlight);
+        }, selectedRateUnit), highlight);
       }
 
       function renderCalculation(result, highlight = false) {
@@ -1402,16 +1537,14 @@
           dailyVolumeMl: result.dailyVolumeMl
         };
 
-        setPreparationValues('personal', {
+        setPreparationValues('personal', assembledPreparation({
           ...context,
           sg5Ml: stagePreparation.sg5Ml,
           nacl20Ml: stagePreparation.nacl20Ml,
           kcl10Ml: stagePreparation.kcl10Ml,
-          totalMl: stagePreparation.stageVolumeMl,
           stages: stagePreparation.stages,
-          rate,
           componentDecimals: 1
-        }, highlight);
+        }, DOM.rateUnit ? DOM.rateUnit.value : 'mlh'), highlight);
 
         setPreparationValues('standard', {
           ...context,
@@ -1427,13 +1560,17 @@
 
         renderClassicHydration(result, highlight);
         const interval = formatStageInterval(stagePreparation.stages).padStart(2, '0');
-        DOM.personalSummary.textContent = `Peso: ${formatNumber(result.weightKg, 3)} kg · NHD: ${formatNumber(result.nhdPercent, 0)}% · Volume em 24 h: ${formatNumber(result.dailyVolumeMl, 2)} mL · Etapas/intervalo: ${stagePreparation.stages} (${interval}/${interval} horas)`;
+        DOM.personalSummary.textContent = T('personal_summary', [formatNumber(result.weightKg, 3), formatNumber(result.nhdPercent, 0), formatNumber(result.dailyVolumeMl, 2), stagePreparation.stages, interval, interval]);
         DOM.personalSummary.hidden = false;
       }
 
       function resetOutputState() {
         clearResults();
       }
+
+      window.HVisoRefreshNativeStrings = () => {
+        if (STATE.lastCalculation) renderCalculation(STATE.lastCalculation, false);
+      };
 
       // event handlers
       function runCalculation(forceClamp = false, highlight = false) {
@@ -1460,7 +1597,7 @@
             DOM.weight.setAttribute('aria-invalid', 'true');
             // Erros não devem roubar o foco durante a edição ou ao sair do campo.
           } else {
-            showError(error.message || 'Não foi possível calcular.');
+            showError(error.message || T('error_calculation'));
           }
           return null;
         }
@@ -1476,7 +1613,7 @@
           return;
         }
 
-        if (!DOM.weight.value.trim() || !DOM.nhdPercent.value.trim()) {
+        if (!DOM.weight.value.trim() || !DOM.nhdPercent.value.trim() || !DOM.rateUnit.value) {
           STATE.lastCalculation = null;
           resetOutputState();
           return;
@@ -1518,6 +1655,11 @@
             }
           }
           STATE.weightDirty = false;
+          runCalculation(false, true);
+        }
+        // Um peso recuperado pode estar preenchido sem cálculo ativo.
+        // Confirmar o campo também deve reconstruir os resultados nesse caso.
+        if (!STATE.weightDirty && !STATE.lastCalculation && DOM.weight.value.trim() && DOM.nhdPercent.value.trim()) {
           runCalculation(false, true);
         }
         if ((edited || moveToResult) && STATE.lastCalculation) showPersonalResult(moveToResult);
@@ -1593,8 +1735,12 @@
         STATE.weightDirty = false;
         STATE.lastCalculation = null;
         DOM.weight.value = '';
-        DOM.nhdPercent.value = '100';
-        DOM.rateUnit.value = 'mlh';
+        DOM.nhdPercent.value = '';
+        DOM.rateUnit.value = '';
+        DOM.stageInterval.value = '';
+        intervalManuallySelected = false;
+        lastIntervalWeight = null;
+        lastIntervalNhd = null;
         clearError();
         clearResults();
         DOM.weight.focus({ preventScroll: true });
@@ -1720,6 +1866,15 @@
         });
       }
 
+      // Posiciona o campo seguinte a 75% da altura visível, sem abrir seu seletor.
+      function positionNextField(field) {
+        if (!field) return;
+        field.focus({ preventScroll: true });
+        const rect = field.getBoundingClientRect();
+        const target = window.scrollY + rect.top - window.innerHeight * .75;
+        window.scrollTo({ top: Math.max(0, target), behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      }
+
       // Navegação por Enter somente entre campos visíveis, habilitados e editáveis.
       function advanceInputFocus(current) {
         const fields = [DOM.weight, DOM.rateUnit, DOM.nhdPercent].filter(el =>
@@ -1728,10 +1883,7 @@
         );
         const next = fields[fields.indexOf(current) + 1];
         if (!next) return;
-        next.focus({preventScroll:true});
-        const rect = next.getBoundingClientRect();
-        const target = window.scrollY + rect.top - window.innerHeight * .34;
-        window.scrollTo({top:Math.max(0,target),behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+        positionNextField(next);
       }
 
       // bootstrap
@@ -1741,13 +1893,29 @@
           confirmWeight(true);
         });
 
+        // Recalcular todos os resultados ao tocar em qualquer campo de entrada,
+        // inclusive quando o valor permanecer igual; sem alterar foco ou rolagem.
+        [DOM.weight, DOM.rateUnit, DOM.nhdPercent, DOM.stageInterval].forEach(field => {
+          field.addEventListener('click', event => {
+            if (!event.isTrusted) return;
+            if (DOM.weight.value.trim() && DOM.rateUnit.value && DOM.nhdPercent.value.trim()) {
+              runCalculation(false, true);
+            }
+          });
+        });
         DOM.weight.addEventListener('focus', cancelResultNavigation);
         DOM.weight.addEventListener('beforeinput', handleWeightBeforeInput);
         DOM.weight.addEventListener('input', handleWeightInput);
-        DOM.weight.addEventListener('change', () => confirmWeight());
         DOM.weight.addEventListener('blur', () => {
           STATE.selectWeightOnNextClick = false;
-          confirmWeight();
+          // Recalcular sempre ao sair, mesmo quando o valor não foi alterado.
+          STATE.weightDirty = false;
+          cancelResultNavigation();
+          STATE.revision += 1;
+          if (DOM.weight.value.trim() && DOM.nhdPercent.value.trim()) runCalculation(false, true);
+          if (DOM.weight.value.trim() && (document.activeElement === document.body || document.activeElement === DOM.weight)) {
+            positionNextField(DOM.rateUnit);
+          }
         });
         DOM.weight.addEventListener('keydown', (event) => {
           STATE.selectWeightOnNextClick = false;
@@ -1761,18 +1929,70 @@
             advanceInputFocus(DOM.weight);
           }
         });
-        [DOM.rateUnit, DOM.nhdPercent].forEach(field => field.addEventListener('keydown', event => {
-          if (event.key !== 'Enter' || event.isComposing) return;
-          event.preventDefault();
-          advanceInputFocus(field);
-        }));
-        DOM.nhdPercent.addEventListener('focus', cancelResultNavigation);
-        DOM.rateUnit.addEventListener('focus', cancelResultNavigation);
-        DOM.nhdPercent.addEventListener('change', () => {
+        // Seletores nativos: nenhum menu HTML sobreposto aos campos.
+        // O foco programático não é interpretado como seleção do usuário.
+        let restoringNativeSelection = false;
+        let rateInteraction = false;
+        let nhdInteraction = false;
+        let nhdCommitted = false;
+        let rateCommitted = false;
+        const markRate = (event) => { if (event.isTrusted) { rateInteraction = true; rateCommitted = false; } };
+        const markNhd = (event) => { if (event.isTrusted) { nhdInteraction = true; nhdCommitted = false; } };
+        DOM.rateUnit.addEventListener('pointerdown', markRate);
+        DOM.nhdPercent.addEventListener('pointerdown', markNhd);
+        DOM.rateUnit.addEventListener('keydown', markRate);
+        DOM.nhdPercent.addEventListener('keydown', markNhd);
+        function commitRateSelection() {
+          if (!rateInteraction || rateCommitted) return;
+          rateCommitted = true;
+          rateInteraction = false;
+          updateAutomatically();
+          positionNextField(DOM.nhdPercent);
+        }
+        function commitNhdSelection() {
+          if (!nhdInteraction || nhdCommitted) return;
+          nhdCommitted = true;
+          nhdInteraction = false;
           applyNhdPercentFieldRules();
           updateAutomatically();
+          if (DOM.nhdPercent.value.trim() && STATE.lastCalculation) showPersonalResult(true);
+        }
+        DOM.rateUnit.addEventListener('change', event => {
+          if (event.isTrusted) commitRateSelection();
         });
-        DOM.rateUnit.addEventListener('change', updateAutomatically);
+        DOM.nhdPercent.addEventListener('change', event => {
+          if (event.isTrusted) commitNhdSelection();
+        });
+        // Alguns seletores nativos permitem confirmar o mesmo valor com Enter.
+        DOM.rateUnit.addEventListener('keyup', event => {
+          if (event.isTrusted && (event.key === 'Enter' || event.key === ' ')) commitRateSelection();
+        });
+        DOM.nhdPercent.addEventListener('keyup', event => {
+          if (event.isTrusted && (event.key === 'Enter' || event.key === ' ')) commitNhdSelection();
+        });
+        DOM.rateUnit.addEventListener('blur', () => {
+          STATE.revision += 1;
+          if (DOM.weight.value.trim() && DOM.nhdPercent.value.trim() && DOM.rateUnit.value) runCalculation(false, true);
+          if (rateInteraction && DOM.rateUnit.value && document.activeElement === document.body) {
+            rateInteraction = false;
+            DOM.nhdPercent.focus({ preventScroll: true });
+          }
+        });
+        DOM.stageInterval.addEventListener('change', (event) => {
+          if (event.isTrusted) intervalManuallySelected = Boolean(DOM.stageInterval.value);
+          updateAutomatically();
+          if (STATE.lastCalculation) showPersonalResult(true);
+        });
+        DOM.nhdPercent.addEventListener('blur', () => {
+          if (!nhdInteraction || !DOM.nhdPercent.value) return;
+          commitNhdSelection();
+        });
+        document.getElementById('calcularDados').addEventListener('click', () => {
+          cancelResultNavigation();
+          STATE.revision += 1;
+          const result = runCalculation(false, true);
+          if (result) showPersonalResult(true);
+        });
         document.getElementById('clearTopButton').addEventListener('click', () => DOM.form.requestReset ? DOM.form.requestReset() : DOM.form.dispatchEvent(new Event('reset', {cancelable:true,bubbles:true})));
         DOM.form.addEventListener('reset', (event) => {
           event.preventDefault();
@@ -1784,7 +2004,9 @@
         bindPreparationCopyButtons();
         window.addEventListener('resize', resizePrescriptionTextareas);
 
-        runCalculation(true);
+        // Sem peso informado, não gerar cálculo ou erro na primeira abertura.
+        if (DOM.weight.value.trim()) runCalculation(true);
+        else clearResults();
       }
 
       window.HVisoCalculator = {
@@ -1823,7 +2045,10 @@
     </div>
   </details>
 
-  <div class="footer-version-row"><div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.014.11.01</span></div><button type="button" class="btn-back-to-top" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
+  
+<a class="legal-disclaimer legal-policy-row" id="privacyPolicyLink" href="https://adaocouto.github.io/pp/" rel="noopener noreferrer"><span>Política de Privacidade</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13 5h6v6M19 5l-9 9M19 13v6H5V5h6"/></svg></a>
+<a class="legal-disclaimer legal-policy-row" id="termsPolicyLink" href="https://adaocouto.github.io/ts/" rel="noopener noreferrer"><span>Termos de Serviço</span><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M13 5h6v6M19 5l-9 9M19 13v6H5V5h6"/></svg></a>
+<div class="footer-version-row"><div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.15.11.07</span></div><button type="button" class="btn-back-to-top" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
 
   <div class="spacer-3lines" aria-hidden="true"></div>
 
@@ -1836,6 +2061,7 @@
       const weight = document.getElementById('peso');
       const nhd = document.getElementById('nhdPercent');
       const rate = document.getElementById('unidadeTaxa');
+      const stage = document.getElementById('intervaloEtapas');
       const form = document.getElementById('formHViso');
       const cards = Array.from(document.querySelectorAll('[data-minimizable-card]'));
       const units = new Set(['mlh', 'gtt', 'microgtt']);
@@ -1848,6 +2074,7 @@
           peso: weight.value,
           nhdPercent: nhd.value,
           unidadeTaxa: rate.value,
+          intervaloEtapas: stage.value,
           cards: Object.fromEntries(cards.map(card => [card.id, !card.classList.contains('is-minimized')]))
         };
         try { localStorage.setItem(storageKey, JSON.stringify(state)); }
@@ -1871,20 +2098,21 @@
           if (typeof saved.nhdPercent === 'string' &&
               Array.from(nhd.options).some(option => option.value === saved.nhdPercent)) {
             nhd.value = saved.nhdPercent;
-            restoredValidInput = true;
           }
-          if (units.has(saved.unidadeTaxa)) { rate.value = saved.unidadeTaxa; restoredValidInput = true; }
-          if (saved.cards && typeof saved.cards === 'object') {
-            cards.forEach(card => {
-              if (typeof saved.cards[card.id] !== 'boolean') return;
-              if (card.id === 'realPreparationCard' || card.id === 'classicHydrationCard') return; // Ambas iniciam minimizadas, inclusive após recuperar a sessão.
-              card.classList.toggle('is-minimized', !saved.cards[card.id]);
-              const toggle = card.querySelector('[data-minimizable-toggle]');
-              if (toggle) toggle.setAttribute('aria-expanded', String(saved.cards[card.id]));
-            });
+          if (units.has(saved.unidadeTaxa)) { rate.value = saved.unidadeTaxa; }
+          if (typeof saved.intervaloEtapas === 'string' && Array.from(stage.options).some(option => option.value === saved.intervaloEtapas)) stage.value = saved.intervaloEtapas;
+          // A disposição inicial é fixa, independentemente do estado salvo.
+          cards.forEach(card => {
+            const isOpen = card.id === 'standardPreparationCard';
+            card.classList.toggle('is-minimized', !isOpen);
+            const toggle = card.querySelector('[data-minimizable-toggle]');
+            if (toggle) toggle.setAttribute('aria-expanded', String(isOpen));
+          });
+          // Após restaurar todos os campos, recalcular com os handlers
+          // existentes; não depender de uma alteração manual do peso.
+          if (restoredValidInput && nhd.value) {
+            nhd.dispatchEvent(new Event('change', { bubbles: true }));
           }
-          // Usa exclusivamente os handlers originais, que recalculam as três prescrições.
-          nhd.dispatchEvent(new Event('change', { bubbles: true }));
           window.dispatchEvent(new Event('resize'));
           document.getElementById('restoredDataNotice').hidden = !restoredValidInput;
           // Dados restaurados não restauram a posição vertical anterior.
@@ -1907,5 +2135,96 @@
   </script>
 
   <script>document.querySelectorAll(".btn-back-to-top").forEach(button=>button.addEventListener("click",()=>window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})));</script>
+
+<script>
+/* Comandos superiores de navegação. Não altera resultados nem apaga dados. */
+(function () {
+  'use strict';
+  var exitButton = document.getElementById('btnSair');
+  if (!exitButton) return;
+  exitButton.addEventListener('click', function () {
+    try {
+      if (window.AndroidApp && typeof window.AndroidApp.exitApp === 'function') {
+        window.AndroidApp.exitApp();
+        return;
+      }
+    } catch (_error) { /* A ponte nativa não está disponível. */ }
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+    try { window.close(); } catch (_error) { /* Fechamento bloqueado. */ }
+    if (!window.closed) {
+      window.alert('O navegador não permite fechar esta aba automaticamente. Feche-a pelos controles do navegador.');
+    }
+  });
+})();
+</script>
+
+<script id="android-i18n-catalog" type="application/json">{"pt-BR":{"static_001":"💧","static_002":"Hidratação Venosa Isotônica","static_003":"Preparo por etapas de","static_004":"Hidratação Venosa Isotônica","static_005":"Limpar dados","static_006":"Sair","static_007":"Português","static_008":"English","static_009":"Dados recuperados","static_010":"Dados anteriores foram recuperados. Confirme as informações antes de utilizar os resultados.","static_011":"Entrada","static_012":"Peso","static_013":"kg","static_014":"Unidade da velocidade de infusão","static_015":"mL/h","static_016":"gotas/min (20 gotas/mL)","static_017":"microgotas/min (60 microgotas/mL)","static_019":"NHD utilizada","static_020":"Selecione","static_022":"Limpar","static_023":"Solução Isotônica Padrão","static_024":"▸","static_025":"Preparo da hidrataçãopor Etapa","static_026":"Copiar Prescrição","static_027":"Solução Isotônica Personalizada","static_028":"▸","static_029":"Preparo da hidrataçãopor Etapa","static_030":"Copiar Prescrição","static_031":"Holliday–Segar Clássica","static_032":"▸","static_033":"Preparo da hidrataçãopor Etapa","static_034":"Copiar Prescrição","static_035":"Atenção clínica","static_036":"Alternativa clássica de manutenção baseada em Holliday-Segar, com sódio 3-2-1 mEq/kg/dia e potássio 2-1-0,5 mEq/kg/dia, convertidos em NaCl 20% e KCl 10% por etapa, respeitando teto de 125 mEq/dia para sódio e 67,5 mEq/dia para potássio.\n            Em pacientes pediátricos hospitalizados, considerar que diretrizes atuais geralmente favorecem soluções isotônicas de manutenção, salvo contexto clínico específico.","static_037":"Referências","static_038":"FELD, L. G. et al. Clinical Practice Guideline: Maintenance Intravenous Fluids in Children.","static_039":"Pediatrics","static_040":", v. 142, n. 6, e20183083, dez. 2018. DOI:","static_041":". Disponível em:","static_042":". Acesso em: 27 out. 2026.","static_043":"HOLLIDAY, M. A.; SEGAR, W. E. The maintenance need for water in parenteral fluid therapy.","static_044":"Pediatrics","static_045":", v. 19, n. 5, p. 823-832, maio 1957. Disponível em:","static_046":". Acesso em: 27 out. 2026.","static_047":"Aviso Legal e Isenção de Responsabilidade","static_048":"Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.","static_049":"Política de Privacidade","static_050":"Termos de Serviço","static_051":"Desenvolvido por Adão L. L. Couto","attribute_001":"Ex.: 12 ou 12,300","attribute_002":"Voltar ao início","attribute_003":"Voltar ao início","attribute_004":"Prescrição da solução isotônica padrão","attribute_005":"Voltar ao início","attribute_006":"Voltar ao início","attribute_007":"Prescrição da solução isotônica personalizada","attribute_008":"Voltar ao início","attribute_009":"Voltar ao início","attribute_010":"Prescrição da hidratação Holliday-Segar clássica","attribute_011":"Voltar ao início","attribute_012":"Voltar ao início","attribute_013":"Voltar ao início","attribute_014":"Voltar ao início","error_weight_invalid":"Informe um peso válido.","error_nhd_invalid":"Informe uma porcentagem válida para a NHD.","error_weight_min":"O valor mínimo para peso é {0} kg.","error_weight_max":"O valor máximo para peso é {0} kg.","error_nhd_min":"A porcentagem da NHD não pode ser menor que {0}%.","error_nhd_max":"A porcentagem da NHD não pode ser maior que {0}%.","warning_macro_low":"Taxa muito baixa para equipo macro. Preferir bomba de infusão em mL/h ou microgotas.","rate_label_drops":"Gotas/minuto","rate_info_drops":"conversão usando equipo macro de 20 gotas/mL","rate_label_micro":"Microgotas/minuto","rate_info_micro":"conversão usando equipo micro de 60 microgotas/mL","rate_label_hour":"mL/hora","rate_info_hour":"taxa contínua das 24 horas","rate_value_drops":"{0} gotas/min","rate_value_micro":"{0} microgotas/min","rate_value_hour":"{0} mL/h","rx_rate_hour":"{0} mL/hora","rx_rate_drops":"{0} gotas/minuto","rx_rate_micro":"{0} microgotas/minuto","rx_prepared_volume":"Volume preparado = {0} mL","rx_infused_volume":"Volume a infundir nesta etapa = {0} mL","rx_total_volume":"Volume Total = {0} mL","rx_sg5":"S.G. 5% - {0} mL","rx_nacl20":"NaCl 20% - {0} mL","rx_kcl10":"KCl 10% - {0} mL","rx_infusion_instruction":"Infundir a {0} de {1}/{2} horas","rx_weight":"Peso: {0} kg","rx_nhd":"NHD: {0}%","rx_daily_volume":"Volume em 24 h: {0} mL","rx_title_standard":"Solução isotônica padrão","rx_title_personal":"Solução isotônica personalizada","rx_title_classic":"Holliday–Segar clássica","copy_success":"✓ Copiado","copy_manual":"Selecione o texto e copie manualmente.","error_calculation":"Não foi possível calcular.","personal_summary":"Peso: {0} kg · NHD: {1}% · Volume em 24 h: {2} mL · Etapas/intervalo: {3} ({4}/{5} horas)"}}</script>
+<script id="android-i18n-runtime">
+(function () {
+  'use strict';
+  const catalog = JSON.parse(document.getElementById('android-i18n-catalog').textContent)['pt-BR'];
+  const bindings = {"static_nodes":[{"selector":"body > header:nth-of-type(1) > h1:nth-of-type(1) > span:nth-of-type(1)","index":0,"key":"static_001","original":"💧"},{"selector":"body > header:nth-of-type(1) > h1:nth-of-type(1) > span:nth-of-type(2)","index":0,"key":"static_002","original":"Hidratação Venosa Isotônica"},{"selector":"body > header:nth-of-type(1) > p:nth-of-type(1)","index":0,"key":"static_003","original":"Preparo por etapas de"},{"selector":"body > header:nth-of-type(1) > p:nth-of-type(1)","index":2,"key":"static_004","original":"Hidratação Venosa Isotônica"},{"selector":"body > div:nth-of-type(1) > button:nth-of-type(1)","index":0,"key":"static_005","original":"Limpar dados"},{"selector":"body > div:nth-of-type(1) > button:nth-of-type(2)","index":0,"key":"static_006","original":"Sair"},{"selector":"body > div:nth-of-type(1) > select:nth-of-type(1) > option:nth-of-type(1)","index":0,"key":"static_007","original":"Português"},{"selector":"body > div:nth-of-type(1) > select:nth-of-type(1) > option:nth-of-type(2)","index":0,"key":"static_008","original":"English"},{"selector":"body > div:nth-of-type(2) > strong:nth-of-type(1)","index":0,"key":"static_009","original":"Dados recuperados"},{"selector":"body > div:nth-of-type(2) > div:nth-of-type(1)","index":0,"key":"static_010","original":"Dados anteriores foram recuperados. Confirme as informações antes de utilizar os resultados."},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1)","index":0,"key":"static_011","original":"Entrada"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > label:nth-of-type(1)","index":0,"key":"static_012","original":"Peso"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > span:nth-of-type(1)","index":0,"key":"static_013","original":"kg"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > label:nth-of-type(1)","index":0,"key":"static_014","original":"Unidade da velocidade de infusão"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > select:nth-of-type(1) > option:nth-of-type(1)","index":0,"key":"static_015","original":"mL/h"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > select:nth-of-type(1) > option:nth-of-type(2)","index":0,"key":"static_016","original":"gotas/min (20 gotas/mL)"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2) > select:nth-of-type(1) > option:nth-of-type(3)","index":0,"key":"static_017","original":"microgotas/min (60 microgotas/mL)"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > label:nth-of-type(1)","index":0,"key":"static_019","original":"NHD utilizada"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > select:nth-of-type(1) > option:nth-of-type(1)","index":0,"key":"static_020","original":"Selecione"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(3) > button:nth-of-type(1)","index":0,"key":"static_022","original":"Limpar"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > button:nth-of-type(1) > span:nth-of-type(1)","index":0,"key":"static_023","original":"Solução Isotônica Padrão"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > button:nth-of-type(1) > span:nth-of-type(2)","index":0,"key":"static_024","original":"▸"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > h3:nth-of-type(1)","index":0,"key":"static_025","original":"Preparo da hidrataçãopor Etapa"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(1)","index":0,"key":"static_026","original":"Copiar Prescrição"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3) > button:nth-of-type(1) > span:nth-of-type(1)","index":0,"key":"static_027","original":"Solução Isotônica Personalizada"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3) > button:nth-of-type(1) > span:nth-of-type(2)","index":0,"key":"static_028","original":"▸"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > h3:nth-of-type(1)","index":0,"key":"static_029","original":"Preparo da hidrataçãopor Etapa"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(1)","index":0,"key":"static_030","original":"Copiar Prescrição"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(4) > button:nth-of-type(1) > span:nth-of-type(1)","index":0,"key":"static_031","original":"Holliday–Segar Clássica"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(4) > button:nth-of-type(1) > span:nth-of-type(2)","index":0,"key":"static_032","original":"▸"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(4) > div:nth-of-type(1) > div:nth-of-type(1) > h3:nth-of-type(1)","index":0,"key":"static_033","original":"Preparo da hidrataçãopor Etapa"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(4) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(1)","index":0,"key":"static_034","original":"Copiar Prescrição"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(4) > div:nth-of-type(1) > div:nth-of-type(2) > strong:nth-of-type(1)","index":0,"key":"static_035","original":"Atenção clínica"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(4) > div:nth-of-type(1) > div:nth-of-type(2)","index":2,"key":"static_036","original":"Alternativa clássica de manutenção baseada em Holliday-Segar, com sódio 3-2-1 mEq/kg/dia e potássio 2-1-0,5 mEq/kg/dia, convertidos em NaCl 20% e KCl 10% por etapa, respeitando teto de 125 mEq/dia para sódio e 67,5 mEq/dia para potássio.\n            Em pacientes pediátricos hospitalizados, considerar que diretrizes atuais geralmente favorecem soluções isotônicas de manutenção, salvo contexto clínico específico."},{"selector":"body > details:nth-of-type(1) > summary:nth-of-type(1)","index":0,"key":"static_037","original":"Referências"},{"selector":"body > details:nth-of-type(1) > div:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(1)","index":0,"key":"static_038","original":"FELD, L. G. et al. Clinical Practice Guideline: Maintenance Intravenous Fluids in Children."},{"selector":"body > details:nth-of-type(1) > div:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(1) > em:nth-of-type(1)","index":0,"key":"static_039","original":"Pediatrics"},{"selector":"body > details:nth-of-type(1) > div:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(1)","index":2,"key":"static_040","original":", v. 142, n. 6, e20183083, dez. 2018. DOI:"},{"selector":"body > details:nth-of-type(1) > div:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(1)","index":4,"key":"static_041","original":". Disponível em:"},{"selector":"body > details:nth-of-type(1) > div:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(1)","index":6,"key":"static_042","original":". Acesso em: 27 out. 2026."},{"selector":"body > details:nth-of-type(1) > div:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(2)","index":0,"key":"static_043","original":"HOLLIDAY, M. A.; SEGAR, W. E. The maintenance need for water in parenteral fluid therapy."},{"selector":"body > details:nth-of-type(1) > div:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(2) > em:nth-of-type(1)","index":0,"key":"static_044","original":"Pediatrics"},{"selector":"body > details:nth-of-type(1) > div:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(2)","index":2,"key":"static_045","original":", v. 19, n. 5, p. 823-832, maio 1957. Disponível em:"},{"selector":"body > details:nth-of-type(1) > div:nth-of-type(1) > ol:nth-of-type(1) > li:nth-of-type(2)","index":4,"key":"static_046","original":". Acesso em: 27 out. 2026."},{"selector":"body > details:nth-of-type(2) > summary:nth-of-type(1)","index":0,"key":"static_047","original":"Aviso Legal e Isenção de Responsabilidade"},{"selector":"body > details:nth-of-type(2) > div:nth-of-type(1)","index":0,"key":"static_048","original":"Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde."},{"selector":"body > a:nth-of-type(1) > span:nth-of-type(1)","index":0,"key":"static_049","original":"Política de Privacidade"},{"selector":"body > a:nth-of-type(2) > span:nth-of-type(1)","index":0,"key":"static_050","original":"Termos de Serviço"},{"selector":"body > div:nth-of-type(3) > div:nth-of-type(1) > strong:nth-of-type(1)","index":0,"key":"static_051","original":"Desenvolvido por Adão L. L. Couto"}],"attributes":[{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > input:nth-of-type(1)","attr":"placeholder","key":"attribute_001","original":"Ex.: 12 ou 12,300"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(3) > button:nth-of-type(2)","attr":"title","key":"attribute_002","original":"Voltar ao início"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(3) > button:nth-of-type(2)","attr":"aria-label","key":"attribute_003","original":"Voltar ao início"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > textarea:nth-of-type(1)","attr":"aria-label","key":"attribute_004","original":"Prescrição da solução isotônica padrão"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(2)","attr":"title","key":"attribute_005","original":"Voltar ao início"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(2)","attr":"aria-label","key":"attribute_006","original":"Voltar ao início"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > textarea:nth-of-type(1)","attr":"aria-label","key":"attribute_007","original":"Prescrição da solução isotônica personalizada"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(2)","attr":"title","key":"attribute_008","original":"Voltar ao início"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(2)","attr":"aria-label","key":"attribute_009","original":"Voltar ao início"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(4) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > textarea:nth-of-type(1)","attr":"aria-label","key":"attribute_010","original":"Prescrição da hidratação Holliday-Segar clássica"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(4) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(2)","attr":"title","key":"attribute_011","original":"Voltar ao início"},{"selector":"body > form:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(4) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > button:nth-of-type(2)","attr":"aria-label","key":"attribute_012","original":"Voltar ao início"},{"selector":"body > div:nth-of-type(3) > button:nth-of-type(1)","attr":"title","key":"attribute_013","original":"Voltar ao início"},{"selector":"body > div:nth-of-type(3) > button:nth-of-type(1)","attr":"aria-label","key":"attribute_014","original":"Voltar ao início"}],"dynamic_keys":["error_weight_invalid","error_nhd_invalid","error_weight_min","error_weight_max","error_nhd_min","error_nhd_max","warning_macro_low","rate_label_drops","rate_info_drops","rate_label_micro","rate_info_micro","rate_label_hour","rate_info_hour","rate_value_drops","rate_value_micro","rate_value_hour","rx_rate_hour","rx_rate_drops","rx_rate_micro","rx_prepared_volume","rx_infused_volume","rx_total_volume","rx_sg5","rx_nacl20","rx_kcl10","rx_infusion_instruction","rx_weight","rx_nhd","rx_daily_volume","rx_title_standard","rx_title_personal","rx_title_classic","copy_success","error_calculation","personal_summary","copy_manual"]};
+  let nativeTexts = Object.create(null);
+  const originalNodes = new WeakMap();
+  const originalAttributes = new WeakMap();
+  function interpolate(value, params) {
+    return String(value).replace(/\{(\d+)\}/g, (match, id) => {
+      const i = Number(id);
+      return i < params.length ? String(params[i]) : match;
+    });
+  }
+  const api = {
+    active: false,
+    t(key, params = []) {
+      const src = Object.prototype.hasOwnProperty.call(nativeTexts,key) ? nativeTexts[key] : catalog[key];
+      return interpolate(src === undefined ? '' : src, params);
+    },
+    receiveJson(raw) {
+      let data;
+      try { data = JSON.parse(raw); } catch (_) { return false; }
+      if (!data || typeof data !== 'object' || Array.isArray(data)) return false;
+      const filtered = Object.create(null);
+      for (const key of Object.keys(catalog)) {
+        if (typeof data[key] === 'string') filtered[key] = data[key];
+      }
+      nativeTexts = filtered;
+      api.active = true;
+      applyStatic();
+      if (typeof window.HVisoRefreshNativeStrings === 'function') window.HVisoRefreshNativeStrings();
+      return true;
+    }
+  };
+  function applyStatic() {
+    if (!api.active) return;
+    bindings.static_nodes.forEach(binding => {
+      const parent = document.querySelector(binding.selector);
+      const node = parent && parent.childNodes[binding.index];
+      if (!node || node.nodeType !== Node.TEXT_NODE) return;
+      const fallback = binding.original;
+      let origin = originalNodes.get(node);
+      if (origin === undefined) { origin = node.nodeValue; originalNodes.set(node,origin); }
+      const replacement = api.t(binding.key);
+      const leading = origin.match(/^\s*/)?.[0] || '';
+      const trailing = origin.match(/\s*$/)?.[0] || '';
+      const value = leading + (replacement || fallback) + trailing;
+      if (node.nodeValue !== value) node.nodeValue = value;
+    });
+    bindings.attributes.forEach(binding => {
+      const el = document.querySelector(binding.selector);
+      if (el && el.hasAttribute(binding.attr)) {
+        const value = api.t(binding.key);
+        if (el.getAttribute(binding.attr) !== value) el.setAttribute(binding.attr,value);
+      }
+    });
+  }
+  window.HVisoAndroidI18n = api;
+  // Updates are narrow: no innerHTML injection, no global text replacements, no event listener replacement.
+  const observer = new MutationObserver(() => { if(api.active) applyStatic(); });
+  observer.observe(document.body, {subtree:true, childList:true, characterData:true});
+})();
+</script>
 </body>
 </html>
